@@ -145,8 +145,8 @@ body{background:var(--bg);color:var(--txt);font-family:'Syne',sans-serif;min-hei
 <div class="view active" id="view-tokens">
   <div class="tlist" id="tlist"></div>
   <div class="save-wrap">
-    <button class="save-btn" id="fetchBtn" onclick="fetchAllMarketData()" style="background:#1a3a5a;border:1px solid #2a5a8a;margin-bottom:8px">⟳  AUTO-ACTUALIZAR RSI · TENDENCIA · VOLUMEN</button>
-    <div class="save-ok" id="fetchOk" style="color:var(--b)">✓ Datos de mercado actualizados</div>
+    <button class="save-btn" id="fetchBtn" onclick="fetchAllMarketData()" style="background:#1a3a5a;border:1px solid #2a5a8a;margin-bottom:8px">⟳  AUTO-ACTUALIZAR PRECIO · RSI · TENDENCIA · VOLUMEN</button>
+    <div class="save-ok" id="fetchOk" style="color:var(--b)">✓ Todo actualizado desde Binance</div>
     <button class="save-btn" onclick="saveDay()">💾  GUARDAR DÍA</button>
     <div class="save-ok" id="saveOk">✓ Datos guardados</div>
   </div>
@@ -287,7 +287,7 @@ function renderAll(){
     html+='<div class="tc-head">';
     html+='<div class="tc-ico" style="background:'+t.color+'18;border:1px solid '+t.color+'33;color:'+t.color+'">'+t.sym.slice(0,3)+'</div>';
     html+='<div class="tc-info"><div class="tc-sym" style="color:'+t.color+'">'+t.sym+'</div><div class="tc-phase">'+t.phase+'</div></div>';
-    html+='<div class="tc-right"><div class="tc-price">'+pFmt+'</div><div class="tc-be">BE '+beFmt+'</div><div class="tc-pnl" style="color:'+pnlCol+'">'+pnlTxt+'</div></div>';
+    html+='<div class="tc-right"><div class="tc-price" id="tp_'+t.sym+'">'+pFmt+'</div><div class="tc-be">BE '+beFmt+'</div><div class="tc-pnl" id="tpnl_'+t.sym+'" style="color:'+pnlCol+'">'+pnlTxt+'</div></div>';
     html+='</div>';
 
     // MOMENTUM BAR
@@ -525,25 +525,39 @@ function fetchAllMarketData(){
       var t=TK.filter(function(x){return x.sym===res.sym;})[0];
       if(!t) return;
 
-      // Update RSI, trend, vol (NOT price — user fills that from Kraken)
+      // Update ALL fields including price
       t.rsi=res.data.rsi;
       t.trend=res.data.trend;
       t.vol=res.data.vol;
+      t.price=res.data.price;
       updated++;
 
-      // Update visible inputs without re-rendering
+      // Update inputs
+      var pi=document.getElementById('p_'+t.sym);
       var ri=document.getElementById('r_'+t.sym);
       var ti=document.getElementById('t_'+t.sym);
       var vi=document.getElementById('v_'+t.sym);
+      if(pi) pi.value=res.data.price.toFixed(res.data.price<1?5:res.data.price<10?4:res.data.price<1000?2:0);
       if(ri) ri.value=res.data.rsi;
       if(ti) ti.value=res.data.trend;
       if(vi) vi.value=res.data.vol;
+
+      // Update price display
+      var p=res.data.price;
+      var pFmt=p>=1000?'$'+Math.round(p).toLocaleString('en-US'):p>=1?'$'+p.toFixed(2):'$'+p.toFixed(5);
+      var pnl=p>0&&t.be>0?(p/t.be-1)*100:null;
+      var pnlTxt=pnl!==null?(pnl>=0?'🟢 +'+pnl.toFixed(1)+'% vs BE':'🔴 '+pnl.toFixed(1)+'% del BE'):'Sin precio';
+      var pnlCol=pnl!==null?(pnl>=0?'var(--g)':'var(--r)'):'var(--txt3)';
+      var tpEl=document.getElementById('tp_'+t.sym);
+      var tpnlEl=document.getElementById('tpnl_'+t.sym);
+      if(tpEl) tpEl.textContent=pFmt;
+      if(tpnlEl){tpnlEl.textContent=pnlTxt;tpnlEl.style.color=pnlCol;}
     });
 
-    // Re-render scores/decisions without touching inputs
+    // Refresh scores/decisions
     refreshScores();
 
-    btn.textContent='✓ ACTUALIZADO — '+updated+' tokens';
+    btn.textContent='✓ TODO ACTUALIZADO — '+updated+' tokens';
     btn.style.background='var(--g)';
     btn.style.color='var(--bg)';
     btn.disabled=false;
@@ -552,14 +566,13 @@ function fetchAllMarketData(){
     ok.style.display='block';
     setTimeout(function(){
       ok.style.display='none';
-      btn.textContent='⟳  AUTO-ACTUALIZAR RSI · TENDENCIA · VOLUMEN';
+      btn.textContent='⟳  AUTO-ACTUALIZAR PRECIO · RSI · TENDENCIA · VOLUMEN';
       btn.style.background='#1a3a5a';
       btn.style.color='var(--txt)';
     },3000);
   }).catch(function(){
-    btn.textContent='⟳  AUTO-ACTUALIZAR RSI · TENDENCIA · VOLUMEN';
+    btn.textContent='⟳  AUTO-ACTUALIZAR PRECIO · RSI · TENDENCIA · VOLUMEN';
     btn.disabled=false;
-    alert('Error al conectar. Verifica la conexión a internet.');
   });
 }
 
