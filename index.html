@@ -145,6 +145,8 @@ body{background:var(--bg);color:var(--txt);font-family:'Syne',sans-serif;min-hei
 <div class="view active" id="view-tokens">
   <div class="tlist" id="tlist"></div>
   <div class="save-wrap">
+    <button class="save-btn" id="fetchBtn" onclick="fetchAllMarketData()" style="background:#1a3a5a;border:1px solid #2a5a8a;margin-bottom:8px">⟳  AUTO-ACTUALIZAR RSI · TENDENCIA · VOLUMEN</button>
+    <div class="save-ok" id="fetchOk" style="color:var(--b)">✓ Datos de mercado actualizados</div>
     <button class="save-btn" onclick="saveDay()">💾  GUARDAR DÍA</button>
     <div class="save-ok" id="saveOk">✓ Datos guardados</div>
   </div>
@@ -290,8 +292,8 @@ function renderAll(){
 
     // MOMENTUM BAR
     html+='<div class="mom">';
-    html+='<div class="mom-top"><span class="mom-lbl">MOMENTUM</span><span class="mom-val" style="color:'+col+'">'+sc+'/100</span></div>';
-    html+='<div class="mom-track"><div class="mom-bar" style="width:'+sc+'%;background:'+fillGrad+'"></div></div>';
+    html+='<div class="mom-top"><span class="mom-lbl">MOMENTUM</span><span class="mom-val" id="ms_'+t.sym+'" style="color:'+col+'">'+sc+'/100</span></div>';
+    html+='<div class="mom-track"><div class="mom-bar" id="mb_'+t.sym+'" style="width:'+sc+'%;background:'+fillGrad+'"></div></div>';
     html+='</div>';
 
     // CATALYSTS
@@ -304,7 +306,7 @@ function renderAll(){
     html+='</div>';
 
     // DECISION
-    html+='<div class="dec '+dec.cls+'"><div class="dec-lbl">'+dec.lbl+'</div><div class="dec-txt">'+dec.txt+'</div></div>';
+    html+='<div class="dec '+dec.cls+'" id="db_'+t.sym+'"><div class="dec-lbl">'+dec.lbl+'</div><div class="dec-txt">'+dec.txt+'</div></div>';
 
     // NOTE
     html+='<div class="tc-note">'+t.note+'</div>';
@@ -325,16 +327,7 @@ function renderAll(){
 
 // Read inputs without re-rendering
 function readInputs(){
-  TK.forEach(function(t){
-    var pi=document.getElementById('p_'+t.sym);
-    var ri=document.getElementById('r_'+t.sym);
-    var ti=document.getElementById('t_'+t.sym);
-    var vi=document.getElementById('v_'+t.sym);
-    if(pi)t.price=parseFloat(pi.value)||null;
-    if(ri)t.rsi=parseFloat(ri.value)||null;
-    if(ti)t.trend=ti.value;
-    if(vi)t.vol=vi.value;
-  });
+  TK.forEach(function(t){ readInputsFor(t); });
 }
 
 function updateGlobalScore(){
@@ -449,6 +442,172 @@ function goTab(n){
   });
   if(n==='summary'){readInputs();renderSummary();}
   if(n==='hist')renderHist();
+}
+
+// ── AUTO MARKET DATA ──────────────────────────────────────────
+var SYMBOLS = {
+  BTC:'BTCUSDT', ETH:'ETHUSDT', SOL:'SOLUSDT',
+  LINK:'LINKUSDT', XRP:'XRPUSDT', HBAR:'HBARUSDT',
+  AAVE:'AAVEUSDT', NEAR:'NEARUSDT', GRT:'GRTUSDT', DOT:'DOTUSDT'
+};
+
+function calcRSI(closes){
+  // 14-period RSI from array of close prices
+  if(closes.length<15) return 50;
+  var gains=0, losses=0;
+  for(var i=closes.length-14;i<closes.length;i++){
+    var diff=closes[i]-closes[i-1];
+    if(diff>0) gains+=diff; else losses+=Math.abs(diff);
+  }
+  var avgG=gains/14, avgL=losses/14;
+  if(avgL===0) return 100;
+  var rs=avgG/avgL;
+  return Math.round(100-(100/(1+rs)));
+}
+
+function calcTrend(closes){
+  if(closes.length<8) return 'lateral';
+  var cur=closes[closes.length-1];
+  var week=closes[closes.length-8];
+  var pct=(cur-week)/week*100;
+  if(pct>3) return 'alcista';
+  if(pct<-3) return 'bajista';
+  return 'lateral';
+}
+
+function calcVol(volumes){
+  if(volumes.length<8) return 'normal';
+  var cur=volumes[volumes.length-1];
+  var avg=volumes.slice(-8,-1).reduce(function(a,b){return a+b;},0)/7;
+  if(avg===0) return 'normal';
+  var ratio=cur/avg;
+  if(ratio>1.4) return 'alto';
+  if(ratio<0.65) return 'bajo';
+  return 'normal';
+}
+
+function fetchToken(sym){
+  var pair=SYMBOLS[sym];
+  if(!pair) return Promise.resolve(null);
+  // Binance public API — no auth needed
+  var url='https://api.binance.com/api/v3/klines?symbol='+pair+'&interval=1d&limit=20';
+  return fetch(url,{signal:AbortSignal.timeout(8000)})
+    .then(function(r){return r.json();})
+    .then(function(data){
+      if(!Array.isArray(data)||data.length<2) return null;
+      var closes=data.map(function(k){return parseFloat(k[4]);});
+      var vols=data.map(function(k){return parseFloat(k[5]);});
+      return{
+        rsi: calcRSI(closes),
+        trend: calcTrend(closes),
+        vol: calcVol(vols),
+        price: closes[closes.length-1] // also get latest price as bonus
+      };
+    })
+    .catch(function(){return null;});
+}
+
+function fetchAllMarketData(){
+  var btn=document.getElementById('fetchBtn');
+  btn.textContent='⟳  CARGANDO...';
+  btn.disabled=true;
+
+  var promises=TK.map(function(t){
+    return fetchToken(t.sym).then(function(d){
+      return{sym:t.sym,data:d};
+    });
+  });
+
+  Promise.all(promises).then(function(results){
+    var updated=0;
+    results.forEach(function(res){
+      if(!res.data) return;
+      var t=TK.filter(function(x){return x.sym===res.sym;})[0];
+      if(!t) return;
+
+      // Update RSI, trend, vol (NOT price — user fills that from Kraken)
+      t.rsi=res.data.rsi;
+      t.trend=res.data.trend;
+      t.vol=res.data.vol;
+      updated++;
+
+      // Update visible inputs without re-rendering
+      var ri=document.getElementById('r_'+t.sym);
+      var ti=document.getElementById('t_'+t.sym);
+      var vi=document.getElementById('v_'+t.sym);
+      if(ri) ri.value=res.data.rsi;
+      if(ti) ti.value=res.data.trend;
+      if(vi) vi.value=res.data.vol;
+    });
+
+    // Re-render scores/decisions without touching inputs
+    refreshScores();
+
+    btn.textContent='✓ ACTUALIZADO — '+updated+' tokens';
+    btn.style.background='var(--g)';
+    btn.style.color='var(--bg)';
+    btn.disabled=false;
+
+    var ok=document.getElementById('fetchOk');
+    ok.style.display='block';
+    setTimeout(function(){
+      ok.style.display='none';
+      btn.textContent='⟳  AUTO-ACTUALIZAR RSI · TENDENCIA · VOLUMEN';
+      btn.style.background='#1a3a5a';
+      btn.style.color='var(--txt)';
+    },3000);
+  }).catch(function(){
+    btn.textContent='⟳  AUTO-ACTUALIZAR RSI · TENDENCIA · VOLUMEN';
+    btn.disabled=false;
+    alert('Error al conectar. Verifica la conexión a internet.');
+  });
+}
+
+// Refresh only scores/momentum bars/decisions without touching inputs
+function refreshScores(){
+  TK.forEach(function(t){
+    readInputsFor(t);
+    var sc=score(t);
+    var col=scoreColor(sc);
+    var cls=scoreClass(sc);
+    var dec=decision(t,sc);
+
+    // Update card class
+    var card=document.getElementById('tc_'+t.sym);
+    if(card) card.className='tc '+cls;
+
+    // Update momentum bar
+    var bar=document.getElementById('mb_'+t.sym);
+    if(bar){
+      var fillGrad=sc>=75?'linear-gradient(90deg,var(--g),#00ffb0)':sc>=50?'linear-gradient(90deg,var(--y),#ffd000)':sc>=30?'linear-gradient(90deg,var(--txt2),#7080a0)':'linear-gradient(90deg,var(--r),#ff8090)';
+      bar.style.width=sc+'%';
+      bar.style.background=fillGrad;
+    }
+    var ms=document.getElementById('ms_'+t.sym);
+    if(ms){ms.textContent=sc+'/100';ms.style.color=col;}
+
+    // Update decision
+    var dbox=document.getElementById('db_'+t.sym);
+    if(dbox){
+      dbox.className='dec '+dec.cls;
+      var dlbl=dbox.querySelector('.dec-lbl');
+      var dtxt=dbox.querySelector('.dec-txt');
+      if(dlbl)dlbl.textContent=dec.lbl;
+      if(dtxt)dtxt.textContent=dec.txt;
+    }
+  });
+  updateGlobalScore();
+}
+
+function readInputsFor(t){
+  var pi=document.getElementById('p_'+t.sym);
+  var ri=document.getElementById('r_'+t.sym);
+  var ti=document.getElementById('t_'+t.sym);
+  var vi=document.getElementById('v_'+t.sym);
+  if(pi&&pi.value) t.price=parseFloat(pi.value);
+  if(ri&&ri.value) t.rsi=parseFloat(ri.value);
+  if(ti) t.trend=ti.value;
+  if(vi) t.vol=vi.value;
 }
 
 // ── INIT ─────────────────────────────────────────────────────
