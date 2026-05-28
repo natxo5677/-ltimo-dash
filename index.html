@@ -30,13 +30,18 @@ body{background:var(--bg);color:var(--txt);font-family:'Syne',sans-serif;min-hei
 .hdr-date{font-size:10px;color:var(--txt3);margin-top:2px}
 .global-score{font-size:28px;font-weight:800;font-family:'Space Mono',monospace}
 
+/* FETCH STATUS BAR */
+.fetch-bar{padding:8px 16px;font-size:10px;font-weight:700;letter-spacing:1px;text-align:center;display:none}
+.fetch-bar.loading{display:block;background:rgba(64,128,255,.1);color:var(--b);border-bottom:1px solid rgba(64,128,255,.2)}
+.fetch-bar.ok{display:block;background:rgba(0,232,160,.08);color:var(--g);border-bottom:1px solid var(--gbdr)}
+.fetch-bar.err{display:block;background:rgba(255,64,96,.08);color:var(--r);border-bottom:1px solid var(--rbdr)}
+
 .tabs{display:flex;background:var(--bg2);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
 .tab{flex-shrink:0;padding:11px 18px;font-size:10px;font-weight:700;letter-spacing:2px;cursor:pointer;border:none;background:transparent;color:var(--txt3);font-family:'Syne',sans-serif;border-bottom:2px solid transparent;transition:all .2s}
 .tab.active{color:var(--txt);border-bottom-color:var(--b)}
 .view{display:none}.view.active{display:block}
 
-/* TOKEN CARDS */
 .tlist{display:flex;flex-direction:column;gap:10px;padding:14px 14px 4px}
 .tc{border-radius:12px;border:1px solid var(--border2);background:var(--bg2);overflow:hidden;transition:border-color .3s}
 .tc.hot{border-color:var(--gbdr)}.tc.warn{border-color:var(--ybdr)}.tc.cold{border-color:var(--border2)}.tc.danger{border-color:var(--rbdr)}
@@ -50,8 +55,8 @@ body{background:var(--bg);color:var(--txt);font-family:'Syne',sans-serif;min-hei
 .tc-price{font-size:16px;font-weight:700;font-family:'Space Mono',monospace}
 .tc-be{font-size:9px;color:var(--txt3);margin-top:2px}
 .tc-pnl{font-size:10px;font-weight:700;margin-top:3px}
+.tc-live{font-size:8px;font-weight:700;padding:1px 5px;border-radius:3px;display:inline-block;margin-top:2px}
 
-/* Momentum */
 .mom{padding:0 14px 8px}
 .mom-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
 .mom-lbl{font-size:8px;font-weight:700;letter-spacing:2px;color:var(--txt3)}
@@ -59,14 +64,12 @@ body{background:var(--bg);color:var(--txt);font-family:'Syne',sans-serif;min-hei
 .mom-track{height:5px;background:var(--bg4);border-radius:3px;overflow:hidden}
 .mom-bar{height:100%;border-radius:3px;transition:width .6s}
 
-/* Catalysts */
 .cats{display:flex;flex-wrap:wrap;gap:4px;padding:0 14px 8px}
 .cat{font-size:8px;font-weight:700;padding:3px 7px;border-radius:4px;letter-spacing:.5px;display:flex;align-items:center;gap:3px}
 .cat.on{background:var(--gbg);color:var(--g);border:1px solid var(--gbdr)}
 .cat.pend{background:var(--ybg);color:var(--y);border:1px solid var(--ybdr)}
 .cat.off{background:var(--bg4);color:var(--txt3);border:1px solid var(--border2);opacity:.6}
 
-/* Decision */
 .dec{margin:0 14px 10px;padding:10px 12px;border-radius:8px;border:1px solid var(--border2);background:var(--bg3)}
 .dec.extend{border-color:var(--gbdr);background:var(--gbg)}
 .dec.hold{border-color:var(--ybdr);background:var(--ybg)}
@@ -76,7 +79,6 @@ body{background:var(--bg);color:var(--txt);font-family:'Syne',sans-serif;min-hei
 .dec.extend .dec-lbl{color:var(--g)}.dec.hold .dec-lbl{color:var(--y)}.dec.wait .dec-lbl{color:var(--txt3)}.dec.danger .dec-lbl{color:var(--r)}
 .dec-txt{font-size:11px;color:var(--txt2);line-height:1.6}
 
-/* Inputs */
 .inp-sect{padding:0 14px 6px}
 .inp-lbl-main{font-size:8px;font-weight:700;letter-spacing:2px;color:var(--txt3);margin-bottom:6px}
 .inp-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
@@ -87,15 +89,13 @@ body{background:var(--bg);color:var(--txt);font-family:'Syne',sans-serif;min-hei
 .inp-sel{width:100%;background:transparent;border:none;color:var(--txt);font-size:12px;font-weight:700;font-family:'Syne',sans-serif;outline:none;-webkit-appearance:none;cursor:pointer}
 .inp-sel option{background:var(--bg3);color:var(--txt)}
 
-/* Note */
 .tc-note{padding:8px 14px;font-size:10px;color:var(--txt3);line-height:1.6;border-top:1px solid var(--border);margin-top:2px}
 
-/* Save */
 .save-wrap{padding:10px 14px 16px}
+.fetch-btn{width:100%;padding:12px;border:1px solid rgba(64,128,255,.3);border-radius:9px;color:var(--b);background:rgba(64,128,255,.08);font-size:11px;font-weight:700;letter-spacing:2px;cursor:pointer;font-family:'Syne',sans-serif;margin-bottom:8px}
 .save-btn{width:100%;padding:12px;background:var(--b);border:none;border-radius:9px;color:#fff;font-size:11px;font-weight:700;letter-spacing:2px;cursor:pointer;font-family:'Syne',sans-serif}
 .save-ok{display:none;text-align:center;font-size:10px;color:var(--g);padding:6px;letter-spacing:1px}
 
-/* SUMMARY */
 .sum-hero{margin:14px;background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:18px}
 .sh-lbl{font-size:8px;font-weight:700;letter-spacing:3px;color:var(--txt3);margin-bottom:6px}
 .sh-score{font-size:44px;font-weight:800;font-family:'Space Mono',monospace;line-height:1}
@@ -109,7 +109,6 @@ body{background:var(--bg);color:var(--txt);font-family:'Syne',sans-serif;min-hei
 .rr-score{font-size:11px;font-weight:700;font-family:'Space Mono',monospace;width:30px;text-align:right}
 .rr-badge{font-size:8px;font-weight:700;padding:2px 6px;border-radius:5px;flex-shrink:0}
 
-/* HISTORY */
 .hist-empty{text-align:center;padding:40px 20px;color:var(--txt3);font-size:12px;line-height:2}
 .hday{margin:0 14px 10px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden}
 .hday-hdr{padding:8px 12px;background:var(--bg3);font-size:8px;font-weight:700;letter-spacing:2px;color:var(--txt3);border-bottom:1px solid var(--border)}
@@ -122,6 +121,8 @@ body{background:var(--bg);color:var(--txt);font-family:'Syne',sans-serif;min-hei
 
 @keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 .tc{animation:fadeIn .25s ease both}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinning{animation:spin .8s linear infinite;display:inline-block}
 </style>
 </head>
 <body>
@@ -136,6 +137,8 @@ body{background:var(--bg);color:var(--txt);font-family:'Syne',sans-serif;min-hei
   </div>
 </div>
 
+<div class="fetch-bar" id="fetchBar"></div>
+
 <div class="tabs">
   <button class="tab active" id="tab-tokens" onclick="goTab('tokens')">TOKENS</button>
   <button class="tab" id="tab-summary" onclick="goTab('summary')">RESUMEN</button>
@@ -145,8 +148,7 @@ body{background:var(--bg);color:var(--txt);font-family:'Syne',sans-serif;min-hei
 <div class="view active" id="view-tokens">
   <div class="tlist" id="tlist"></div>
   <div class="save-wrap">
-    <button class="save-btn" id="fetchBtn" onclick="fetchAllMarketData()" style="background:#1a3a5a;border:1px solid #2a5a8a;margin-bottom:8px">⟳  AUTO-ACTUALIZAR PRECIO · RSI · TENDENCIA · VOLUMEN</button>
-    <div class="save-ok" id="fetchOk" style="color:var(--b)">✓ Todo actualizado desde Binance</div>
+    <button class="fetch-btn" id="fetchBtn" onclick="fetchAllPrices()">⟳  ACTUALIZAR PRECIOS EN VIVO</button>
     <button class="save-btn" onclick="saveDay()">💾  GUARDAR DÍA</button>
     <div class="save-ok" id="saveOk">✓ Datos guardados</div>
   </div>
@@ -168,57 +170,84 @@ body{background:var(--bg);color:var(--txt);font-family:'Syne',sans-serif;min-hei
 
 <script>
 // ── TOKENS DATA ───────────────────────────────────────────────
+// Precios actualizados 28 Mayo 2026
 var TK = [
   {sym:'BTC', name:'Bitcoin',    color:'#f7931a', be:88402,   narr:70, phase:'FASE 1 TARDÍA',
-   cats:[{n:'Reserva estratégica EEUU',s:1},{n:'ETF AUM $60B',s:1},{n:'Warsh Fed dovish',s:null},{n:'Rompe $82.4K',s:0}],
-   note:'Consolida $75-80K. Necesita romper 200-day MA $82.4K para activar el ciclo. Kevin Warsh (nuevo Fed) puede ser catalizador dovish.',
-   price:75489, rsi:42, trend:'bajista', vol:'bajo'},
+   cgId:'bitcoin',
+   cats:[{n:'Reserva estratégica EEUU',s:1},{n:'ETF AUM $60B',s:1},{n:'Warsh Fed dovish',s:null},{n:'Rompe $82.4K MA200',s:0}],
+   note:'Consolida $73-77K. Perdió el soporte de $75K. Dark pool $1.3B IBIT vendido el 26 mayo. Necesita recuperar $82.4K (MA200) para activar la Fase 2.',
+   price:73100, rsi:36, trend:'bajista', vol:'bajo'},
 
   {sym:'ETH', name:'Ethereum',   color:'#627eea', be:2862,    narr:52, phase:'MÁS REZAGADO',
+   cgId:'ethereum',
    cats:[{n:'ETH ETF staking yield',s:null},{n:'EigenLayer creciendo',s:1},{n:'ETH/BTC gira >0.032',s:0},{n:'CLARITY Act commodity',s:null}],
-   note:'ETH/BTC en mínimos del ciclo (0.027). El más débil de la cartera. Necesita dominancia BTC bajo 58% para despertar.',
-   price:2064, rsi:38, trend:'bajista', vol:'bajo'},
+   note:'ETH/BTC en mínimos históricos (0.027). Rompió $2.000 hoy. El más débil de la cartera. Necesita dominancia BTC bajo 58% para despertar.',
+   price:1983, rsi:35, trend:'bajista', vol:'bajo'},
 
   {sym:'SOL', name:'Solana',     color:'#9945ff', be:116.52,  narr:72, phase:'ESPERANDO FASE 2',
+   cgId:'solana',
    cats:[{n:'USDF Coinbase en Solana',s:1},{n:'Alpenglow mainnet',s:null},{n:'ETF inflows continuos',s:1},{n:'Altseason Index >50',s:0}],
-   note:'Ecosistema más activo. USDF stablecoin lanzada. Alpenglow upgrade en testnet. Sube con la marea — necesita altseason general.',
-   price:84.30, rsi:40, trend:'bajista', vol:'bajo'},
+   note:'Ecosistema más activo. USDF stablecoin lanzada. Alpenglow upgrade en testnet. -30% del BE. Sube con la marea general.',
+   price:80900, rsi:38, trend:'bajista', vol:'bajo'},
 
-  {sym:'LINK', name:'Chainlink', color:'#375bd2', be:10.19,   narr:85, phase:'CATALIZADORES PENDIENTES',
-   cats:[{n:'SWIFT CCIP live junio',s:1},{n:'DTCC AppChain Q4 2026',s:1},{n:'CLARITY Act firmada',s:0},{n:'Fed dovish bajada tipos',s:null}],
-   note:'Fundamentos institucionales excepcionales: DTCC $114T, SWIFT, JPMorgan, Mastercard. Precio dormido esperando regulación. Divergencia uso/precio histórica.',
-   price:9.42, rsi:42, trend:'lateral', vol:'bajo'},
+  {sym:'LINK', name:'Chainlink', color:'#375bd2', be:10.19,   narr:88, phase:'CATALIZADORES ACTIVOS',
+   cgId:'chainlink',
+   cats:[{n:'Mastercard 3.5B usuarios',s:1},{n:'SWIFT CCIP live junio',s:1},{n:'CLARITY Act firmada',s:0},{n:'Ballenas acumulando récord',s:1}],
+   note:'NUEVO: Mastercard integra LINK para 3.500M de usuarios (26 mayo). Ballenas en récord histórico — 805 wallets con >100K LINK. Precio lateral mientras acumula.',
+   price:8870, rsi:40, trend:'lateral', vol:'normal'},
 
   {sym:'XRP', name:'Ripple',     color:'#00aae4', be:1.94,    narr:82, phase:'BLOQUEADO — ESPERA LEY',
-   cats:[{n:'SWIFT 25+ bancos junio',s:1},{n:'Japón FIEA parlamento',s:null},{n:'CLARITY Act firmada',s:0},{n:'SBI ETF Tokio',s:null}],
-   note:'$21.7B japoneses en XRP. SWIFT conectado vía Thunes-ODL. RLUSD live en Japón. Token más binario: CLARITY Act lo desbloquea todo.',
-   price:1.33, rsi:40, trend:'bajista', vol:'bajo'},
+   cgId:'ripple',
+   cats:[{n:'SWIFT 25+ bancos junio',s:1},{n:'Japón FIEA parlamento',s:null},{n:'CLARITY Act firmada',s:0},{n:'ETF Grayscale pendiente',s:null}],
+   note:'SWIFT live con 25+ bancos en junio. $21.7B japoneses en XRP. RLUSD live. El más binario: CLARITY Act lo desbloquea todo. Standard Chartered target $8.',
+   price:1295, rsi:38, trend:'bajista', vol:'bajo'},
 
   {sym:'HBAR', name:'Hedera',    color:'#8e9494', be:0.09904, narr:80, phase:'ENTERPRISE ACTIVO',
-   cats:[{n:'Georgia registro inmobiliario',s:1},{n:'15 ETFs SEC revisión',s:1},{n:'CLARITY Act commodity',s:0},{n:'HederaCon 2026',s:null}],
-   note:'Google, IBM, Boeing, LG en Governing Council. Georgia migra registro nacional. Solo -11% bajo BE. Muy cerca de entrar en verde.',
-   price:0.08794, rsi:43, trend:'lateral', vol:'bajo'},
+   cgId:'hedera-hashgraph',
+   cats:[{n:'Georgia registro inmobiliario',s:1},{n:'15 ETFs SEC revisión',s:1},{n:'CLARITY Act commodity',s:0},{n:'Canary HBAR ETF listado',s:1}],
+   note:'15 ETFs activos en revisión SEC. Canary HBAR ETF ya listado con 549M HBAR. Google, IBM, Boeing en Governing Council. Solo -14% del BE.',
+   price:8501, rsi:41, trend:'lateral', vol:'bajo'},
 
-  {sym:'AAVE', name:'Aave',      color:'#b6509e', be:136.07,  narr:58, phase:'ANTI-YIELDS',
-   cats:[{n:'Warsh Fed señal dovish',s:null},{n:'CLARITY Act DeFi legal',s:0},{n:'Yields bono <4%',s:0},{n:'Aave v4 lanzamiento',s:null}],
-   note:'Correlación inversa con yields de bonos. Con bonos al 5% nadie usa DeFi. Warsh (nuevo Fed) puede ser el detonador. El más paciente.',
-   price:85.94, rsi:36, trend:'bajista', vol:'bajo'},
+  {sym:'AAVE', name:'Aave',      color:'#b6509e', be:136.07,  narr:48, phase:'RECUPERACIÓN POST-HACK',
+   cgId:'aave',
+   cats:[{n:'Hack rsETH resuelto',s:1},{n:'CLARITY Act DeFi legal',s:0},{n:'Yields bono <4%',s:0},{n:'Aave v4 lanzamiento',s:null}],
+   note:'Hack de abril resuelto — DeFi United aportó $300M. Recuperación completa. Pero -41% del BE. Necesita yields bajos + CLARITY Act + confianza DeFi.',
+   price:8023, rsi:34, trend:'bajista', vol:'bajo'},
 
-  {sym:'NEAR', name:'NEAR Protocol', color:'#00c08b', be:1.37, narr:92, phase:'MOMENTUM PROPIO AI',
-   cats:[{n:'NEARCON 2026 AI infra',s:1},{n:'Confidential GPU Marketplace',s:1},{n:'Bridge Solana/TON activo',s:1},{n:'RSI no sobrecomprado',s:1}],
-   note:'Único token que sube mientras todo cae. +53% sobre BE. Narrativa AI completamente independiente del ciclo macro. Momentum acelerándose.',
-   price:2.10, rsi:61, trend:'alcista', vol:'alto'},
+  {sym:'NEAR', name:'NEAR Protocol', color:'#00c08b', be:1.37, narr:90, phase:'MOMENTUM AI PROPIO',
+   cgId:'near',
+   cats:[{n:'Dynamic Resharding junio',s:1},{n:'ETF Grayscale S-1 presentado',s:1},{n:'Arthur Hayes "holy trinity"',s:1},{n:'RSI no sobrecomprado',s:1}],
+   note:'Único en verde de la cartera (+70% BE). Corrección -10% hoy tras subida +54% semanal — completamente normal. Dynamic Resharding en junio. ETF Grayscale pendiente.',
+   price:2337, rsi:55, trend:'lateral', vol:'alto'},
 
   {sym:'GRT', name:'The Graph',  color:'#6747ed', be:0.03421, narr:74, phase:'DORMIDO — FASE 3',
+   cgId:'the-graph',
    cats:[{n:'Horizon mainnet 2026',s:1},{n:'Narrativa AI datos',s:1},{n:'Altseason Index >65',s:0},{n:'Retail entrada masiva',s:0}],
-   note:'Horizon mainnet en 2026. Indexa datos para apps AI. 11.94% APY acumula tokens. De $0.10 a $2.88 en 2021 en altseason — patrón pendiente.',
-   price:0.0258, rsi:44, trend:'lateral', vol:'normal'},
+   note:'11.94% APY acumulando tokens. De $0.10 a $2.88 en 2021 en altseason — patrón pendiente. Horizon mainnet 2026. Indexa datos para apps AI.',
+   price:2608, rsi:42, trend:'lateral', vol:'normal'},
 
   {sym:'DOT', name:'Polkadot',   color:'#e6007a', be:1.53,    narr:55, phase:'SUBE CON LA MAREA',
-   cats:[{n:'JAM upgrade lanzamiento',s:null},{n:'Staking 5.45% APY',s:1},{n:'Altseason confirmada',s:0},{n:'Nuevas parachains',s:null}],
-   note:'JAM upgrade como narrativa renovada. 5.45% APY de suelo natural. Sin catalizadores propios — sube cuando la altseason general llega.',
-   price:1.26, rsi:39, trend:'bajista', vol:'bajo'}
+   cgId:'polkadot',
+   cats:[{n:'JAM upgrade lanzamiento',s:null},{n:'Staking 5.49% APY',s:1},{n:'Altseason confirmada',s:0},{n:'Nuevas parachains',s:null}],
+   note:'5.49% APY de suelo natural. Sin catalizadores propios fuertes. Sube cuando la altseason general llega. JAM upgrade como narrativa renovada.',
+   price:1196, rsi:37, trend:'bajista', vol:'bajo'}
 ];
+
+// Mapeo precios: los precios están en unidades del token (multiplicados x100 o x10000 para tokens < $1)
+// Precios reales: BTC=73100, SOL=80.9 → guardamos como 80900 para SOL (centavos x1000)
+// SIMPLIFICADO: guardamos el precio real directamente como float
+
+// Corrección: los precios deben ser en USD reales
+TK[0].price = 73100;   // BTC
+TK[1].price = 1983;    // ETH  
+TK[2].price = 80.90;   // SOL
+TK[3].price = 8.87;    // LINK
+TK[4].price = 1.295;   // XRP
+TK[5].price = 0.08501; // HBAR
+TK[6].price = 80.23;   // AAVE
+TK[7].price = 2.337;   // NEAR
+TK[8].price = 0.02608; // GRT
+TK[9].price = 1.196;   // DOT
 
 // ── STORAGE ───────────────────────────────────────────────────
 function getSaved(){try{return JSON.parse(localStorage.getItem('ti3_saved')||'{}')}catch(e){return{}}}
@@ -226,11 +255,11 @@ function setSaved(d){try{localStorage.setItem('ti3_saved',JSON.stringify(d))}cat
 function getHist(){try{return JSON.parse(localStorage.getItem('ti3_hist')||'[]')}catch(e){return[]}}
 function setHist(h){try{localStorage.setItem('ti3_hist',JSON.stringify(h))}catch(e){}}
 
-// Load saved into TK
+// Load saved
 var saved=getSaved();
 TK.forEach(function(t){
   if(saved[t.sym]){
-    if(saved[t.sym].price!==undefined)t.price=saved[t.sym].price;
+    if(saved[t.sym].price!==undefined&&saved[t.sym].price>0)t.price=saved[t.sym].price;
     if(saved[t.sym].rsi!==undefined)t.rsi=saved[t.sym].rsi;
     if(saved[t.sym].trend)t.trend=saved[t.sym].trend;
     if(saved[t.sym].vol)t.vol=saved[t.sym].vol;
@@ -257,14 +286,24 @@ function scoreClass(s){return s>=75?'hot':s>=50?'warn':s>=30?'cold':'danger';}
 function decision(t,s){
   var p=parseFloat(t.price)||0;
   var ratio=p>0&&t.be>0?p/t.be:0;
-  if(s>=80&&ratio>=0.85) return {cls:'extend',lbl:'⬆ EXTENDER TP',txt:'Momentum excepcional y precio cerca del BE. Los catalizadores y la trayectoria sugieren que el token puede superar los TPs actuales. Considera elevar el TP1 un 15-20% o retrasar la ejecución del primer 40%.'};
-  if(s>=80) return {cls:'hold',lbl:'◉ ALTA CONVICCIÓN — MANTENER',txt:'Momentum muy fuerte pero precio aún lejos del BE. Los catalizadores activos darán el empuje. Mantener posición completa en staking.'};
-  if(s>=55) return {cls:'hold',lbl:'→ MANTENER TPs ACTUALES',txt:'Momentum moderado. Los catalizadores están en proceso. El plan 40/30/30% es correcto tal cual. Ejecutar sin dudar cuando llegue el TP1.'};
-  if(s>=30) return {cls:'wait',lbl:'⏳ ESPERAR CATALIZADORES',txt:'Momentum bajo. Necesita más catalizadores activos antes de moverse significativamente. Mantener en staking y esperar.'};
-  return {cls:'danger',lbl:'⚠ REVISIÓN ESTRATÉGICA',txt:'Múltiples señales débiles. Si el momentum sigue deteriorándose y los catalizadores se bloquean, revisar el plan. No actuar impulsivamente.'};
+  if(s>=80&&ratio>=0.85)return{cls:'extend',lbl:'⬆ EXTENDER TP',txt:'Momentum excepcional y precio cerca del BE. Los catalizadores y la trayectoria sugieren que el token puede superar los TPs actuales.'};
+  if(s>=80)return{cls:'hold',lbl:'◉ ALTA CONVICCIÓN — MANTENER',txt:'Momentum muy fuerte pero precio aún lejos del BE. Los catalizadores activos darán el empuje. Mantener posición completa en staking.'};
+  if(s>=55)return{cls:'hold',lbl:'→ MANTENER TPs ACTUALES',txt:'Momentum moderado. Los catalizadores están en proceso. El plan 20/30/30/20% es correcto tal cual. Ejecutar sin dudar cuando llegue el TP1.'};
+  if(s>=30)return{cls:'wait',lbl:'⏳ ESPERAR CATALIZADORES',txt:'Momentum bajo. Necesita más catalizadores activos antes de moverse significativamente. Mantener en staking y esperar.'};
+  return{cls:'danger',lbl:'⚠ REVISIÓN ESTRATÉGICA',txt:'Múltiples señales débiles. Si el momentum sigue deteriorándose, revisar el plan. No actuar impulsivamente.'};
 }
 
-// ── RENDER TOKENS ─────────────────────────────────────────────
+// ── FORMAT PRICE ─────────────────────────────────────────────
+function fmtPrice(p){
+  p=parseFloat(p)||0;
+  if(p>=10000)return '$'+Math.round(p).toLocaleString('en-US');
+  if(p>=100)return '$'+p.toFixed(2);
+  if(p>=1)return '$'+p.toFixed(3);
+  if(p>=0.01)return '$'+p.toFixed(4);
+  return '$'+p.toFixed(5);
+}
+
+// ── RENDER ────────────────────────────────────────────────────
 function renderAll(){
   var html='';
   TK.forEach(function(t,i){
@@ -276,8 +315,8 @@ function renderAll(){
     var pnl=p>0&&t.be>0?(p/t.be-1)*100:null;
     var pnlTxt=pnl!==null?(pnl>=0?'🟢 +'+pnl.toFixed(1)+'% vs BE':'🔴 '+pnl.toFixed(1)+'% del BE'):'Sin precio';
     var pnlCol=pnl!==null?(pnl>=0?'var(--g)':'var(--r)'):'var(--txt3)';
-    var pFmt=p===0?'$—':p>=1000?'$'+Math.round(p).toLocaleString('en-US'):p>=1?'$'+p.toFixed(2):'$'+p.toFixed(5);
-    var beFmt=t.be>=1000?'$'+Math.round(t.be).toLocaleString('en-US'):t.be>=1?'$'+t.be.toFixed(2):'$'+t.be.toFixed(4);
+    var pFmt=fmtPrice(p);
+    var beFmt=fmtPrice(t.be);
     var fillGrad=sc>=75?'linear-gradient(90deg,var(--g),#00ffb0)':sc>=50?'linear-gradient(90deg,var(--y),#ffd000)':sc>=30?'linear-gradient(90deg,var(--txt2),#7080a0)':'linear-gradient(90deg,var(--r),#ff8090)';
 
     html+='<div class="tc '+cls+'" id="tc_'+t.sym+'" style="animation-delay:'+(i*.03)+'s">';
@@ -287,10 +326,14 @@ function renderAll(){
     html+='<div class="tc-head">';
     html+='<div class="tc-ico" style="background:'+t.color+'18;border:1px solid '+t.color+'33;color:'+t.color+'">'+t.sym.slice(0,3)+'</div>';
     html+='<div class="tc-info"><div class="tc-sym" style="color:'+t.color+'">'+t.sym+'</div><div class="tc-phase">'+t.phase+'</div></div>';
-    html+='<div class="tc-right"><div class="tc-price" id="tp_'+t.sym+'">'+pFmt+'</div><div class="tc-be">BE '+beFmt+'</div><div class="tc-pnl" id="tpnl_'+t.sym+'" style="color:'+pnlCol+'">'+pnlTxt+'</div></div>';
-    html+='</div>';
+    html+='<div class="tc-right">';
+    html+='<div class="tc-price" id="tp_'+t.sym+'">'+pFmt+'</div>';
+    html+='<div class="tc-be">BE '+beFmt+'</div>';
+    html+='<div class="tc-pnl" id="tpnl_'+t.sym+'" style="color:'+pnlCol+'">'+pnlTxt+'</div>';
+    html+='<div class="tc-live" id="tlive_'+t.sym+'" style="background:rgba(74,82,112,.2);color:var(--txt3)">manual</div>';
+    html+='</div></div>';
 
-    // MOMENTUM BAR
+    // MOMENTUM
     html+='<div class="mom">';
     html+='<div class="mom-top"><span class="mom-lbl">MOMENTUM</span><span class="mom-val" id="ms_'+t.sym+'" style="color:'+col+'">'+sc+'/100</span></div>';
     html+='<div class="mom-track"><div class="mom-bar" id="mb_'+t.sym+'" style="width:'+sc+'%;background:'+fillGrad+'"></div></div>';
@@ -311,10 +354,10 @@ function renderAll(){
     // NOTE
     html+='<div class="tc-note">'+t.note+'</div>';
 
-    // INPUTS — no oninput re-render, use change events stored silently
-    html+='<div class="inp-sect"><div class="inp-lbl-main">ACTUALIZAR</div>';
+    // INPUTS
+    html+='<div class="inp-sect"><div class="inp-lbl-main">ACTUALIZAR MANUAL</div>';
     html+='<div class="inp-grid">';
-    html+='<div class="inp-box"><label class="inp-box-lbl">PRECIO HOY</label><input class="inp-f" id="p_'+t.sym+'" type="number" step="any" placeholder="'+(t.be<1?'0.000':'0')+'" value="'+(p||'')+'"></div>';
+    html+='<div class="inp-box"><label class="inp-box-lbl">PRECIO HOY</label><input class="inp-f" id="p_'+t.sym+'" type="number" step="any" placeholder="'+t.be+'" value="'+(p||'')+'"></div>';
     html+='<div class="inp-box"><label class="inp-box-lbl">RSI TRADINGVIEW</label><input class="inp-f" id="r_'+t.sym+'" type="number" step="1" min="0" max="100" placeholder="50" value="'+(t.rsi||'')+'"></div>';
     html+='<div class="inp-box"><label class="inp-box-lbl">TENDENCIA</label><select class="inp-sel" id="t_'+t.sym+'"><option value="alcista"'+(t.trend==='alcista'?' selected':'')+'>⬆ Alcista</option><option value="lateral"'+(t.trend==='lateral'?' selected':'')+'>→ Lateral</option><option value="bajista"'+(t.trend==='bajista'?' selected':'')+'>⬇ Bajista</option></select></div>';
     html+='<div class="inp-box"><label class="inp-box-lbl">VOLUMEN</label><select class="inp-sel" id="v_'+t.sym+'"><option value="alto"'+(t.vol==='alto'?' selected':'')+'>⬆ Alto</option><option value="normal"'+(t.vol==='normal'?' selected':'')+'>→ Normal</option><option value="bajo"'+(t.vol==='bajo'?' selected':'')+'>⬇ Bajo</option></select></div>';
@@ -325,10 +368,18 @@ function renderAll(){
   updateGlobalScore();
 }
 
-// Read inputs without re-rendering
-function readInputs(){
-  TK.forEach(function(t){ readInputsFor(t); });
+function readInputsFor(t){
+  var pi=document.getElementById('p_'+t.sym);
+  var ri=document.getElementById('r_'+t.sym);
+  var ti=document.getElementById('t_'+t.sym);
+  var vi=document.getElementById('v_'+t.sym);
+  if(pi&&pi.value&&parseFloat(pi.value)>0)t.price=parseFloat(pi.value);
+  if(ri&&ri.value)t.rsi=parseFloat(ri.value);
+  if(ti)t.trend=ti.value;
+  if(vi)t.vol=vi.value;
 }
+
+function readInputs(){TK.forEach(function(t){readInputsFor(t);});}
 
 function updateGlobalScore(){
   var scores=TK.map(function(t){return score(t);});
@@ -338,6 +389,107 @@ function updateGlobalScore(){
   if(gs){gs.textContent=avg;gs.style.color=col;}
 }
 
+function refreshScores(){
+  TK.forEach(function(t){
+    readInputsFor(t);
+    var sc=score(t);
+    var col=scoreColor(sc);
+    var cls=scoreClass(sc);
+    var dec=decision(t,sc);
+    var card=document.getElementById('tc_'+t.sym);
+    if(card)card.className='tc '+cls;
+    var bar=document.getElementById('mb_'+t.sym);
+    if(bar){
+      var fg=sc>=75?'linear-gradient(90deg,var(--g),#00ffb0)':sc>=50?'linear-gradient(90deg,var(--y),#ffd000)':sc>=30?'linear-gradient(90deg,var(--txt2),#7080a0)':'linear-gradient(90deg,var(--r),#ff8090)';
+      bar.style.width=sc+'%';bar.style.background=fg;
+    }
+    var ms=document.getElementById('ms_'+t.sym);
+    if(ms){ms.textContent=sc+'/100';ms.style.color=col;}
+    var dbox=document.getElementById('db_'+t.sym);
+    if(dbox){
+      dbox.className='dec '+dec.cls;
+      var dlbl=dbox.querySelector('.dec-lbl');
+      var dtxt=dbox.querySelector('.dec-txt');
+      if(dlbl)dlbl.textContent=dec.lbl;
+      if(dtxt)dtxt.textContent=dec.txt;
+    }
+  });
+  updateGlobalScore();
+}
+
+// ── LIVE PRICE FETCH — CoinGecko (sin API key, funciona desde móvil) ──
+function fetchAllPrices(){
+  var btn=document.getElementById('fetchBtn');
+  var bar=document.getElementById('fetchBar');
+  btn.textContent='⟳  CARGANDO...';
+  btn.disabled=true;
+  bar.className='fetch-bar loading';
+  bar.textContent='⟳ Conectando con CoinGecko...';
+
+  var ids=TK.map(function(t){return t.cgId;}).join(',');
+  var url='https://api.coingecko.com/api/v3/simple/price?ids='+ids+'&vs_currencies=usd&include_24hr_change=true';
+
+  fetch(url,{signal:AbortSignal.timeout(10000)})
+    .then(function(r){
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      return r.json();
+    })
+    .then(function(data){
+      var updated=0;
+      TK.forEach(function(t){
+        var d=data[t.cgId];
+        if(!d||!d.usd)return;
+        var newPrice=d.usd;
+        var ch=d.usd_24h_change||0;
+        t.price=newPrice;
+
+        // Update input
+        var pi=document.getElementById('p_'+t.sym);
+        if(pi)pi.value=newPrice;
+
+        // Update display
+        var pFmt=fmtPrice(newPrice);
+        var pnl=newPrice>0&&t.be>0?(newPrice/t.be-1)*100:null;
+        var pnlTxt=pnl!==null?(pnl>=0?'🟢 +'+pnl.toFixed(1)+'% vs BE':'🔴 '+pnl.toFixed(1)+'% del BE'):'—';
+        var pnlCol=pnl!==null?(pnl>=0?'var(--g)':'var(--r)'):'var(--txt3)';
+
+        var tpEl=document.getElementById('tp_'+t.sym);
+        var tpnlEl=document.getElementById('tpnl_'+t.sym);
+        var tliveEl=document.getElementById('tlive_'+t.sym);
+
+        if(tpEl)tpEl.textContent=pFmt;
+        if(tpnlEl){tpnlEl.textContent=pnlTxt;tpnlEl.style.color=pnlCol;}
+        if(tliveEl){
+          tliveEl.textContent='LIVE '+(ch>=0?'▲+':' ▼')+Math.abs(ch).toFixed(1)+'%';
+          tliveEl.style.background=ch>=0?'rgba(0,232,160,.12)':'rgba(255,64,96,.12)';
+          tliveEl.style.color=ch>=0?'var(--g)':'var(--r)';
+        }
+        updated++;
+      });
+
+      refreshScores();
+      bar.className='fetch-bar ok';
+      bar.textContent='✓ '+updated+' tokens actualizados desde CoinGecko · '+new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+      btn.textContent='⟳  ACTUALIZAR PRECIOS EN VIVO';
+      btn.disabled=false;
+      setTimeout(function(){bar.className='fetch-bar';},8000);
+    })
+    .catch(function(err){
+      bar.className='fetch-bar err';
+      bar.textContent='✗ Sin conexión — usa los valores manuales';
+      btn.textContent='⟳  ACTUALIZAR PRECIOS EN VIVO';
+      btn.disabled=false;
+      setTimeout(function(){bar.className='fetch-bar';},6000);
+    });
+}
+
+// Auto-fetch al arrancar
+function autoFetch(){
+  fetchAllPrices();
+  // Refresca cada 60 segundos
+  setInterval(fetchAllPrices,60000);
+}
+
 // ── SUMMARY ───────────────────────────────────────────────────
 function renderSummary(){
   readInputs();
@@ -345,12 +497,10 @@ function renderSummary(){
   var avg=Math.round(data.reduce(function(a,b){return a+b.sc;},0)/data.length);
   var sorted=data.slice().sort(function(a,b){return b.sc-a.sc;});
   var maxSc=sorted[0].sc;
-
   var col=scoreColor(avg);
   var el=document.getElementById('sumScore');if(el){el.textContent=avg;el.style.color=col;}
   var sub=avg>=70?'Cartera en momentum alcista — preparar ejecución de TPs próximos':avg>=50?'Momentum moderado — mantener posiciones y esperar catalizadores':avg>=35?'Momento de espera — ciclo no activo todavía para la mayoría':'Revisión recomendada — múltiples señales negativas';
   var sEl=document.getElementById('sumSub');if(sEl)sEl.textContent=sub;
-
   var decCols={extend:'var(--g)',hold:'var(--y)',wait:'var(--txt3)',danger:'var(--r)'};
   var decLbls={extend:'EXTENDER',hold:'MANTENER',wait:'ESPERAR',danger:'REVISAR'};
   var html=sorted.map(function(d,i){
@@ -382,7 +532,7 @@ function renderHist(){
       var dc=decCols[td.dec]||'var(--txt3)';
       var dl=decLbls[td.dec]||'—';
       var p=parseFloat(td.price)||0;
-      var pFmt=p===0?'—':p>=1000?'$'+Math.round(p)+'K':p>=1?'$'+p.toFixed(2):'$'+p.toFixed(4);
+      var pFmt=fmtPrice(p);
       return '<div class="hday-row">'
         +'<div class="hr-sym" style="color:'+c+'">'+td.sym+'</div>'
         +'<div class="hr-price">'+pFmt+'</div>'
@@ -398,12 +548,9 @@ function renderHist(){
 // ── SAVE ─────────────────────────────────────────────────────
 function saveDay(){
   readInputs();
-  // Save current state
   var s={};
   TK.forEach(function(t){s[t.sym]={price:t.price,rsi:t.rsi,trend:t.trend,vol:t.vol};});
   setSaved(s);
-
-  // Save to history
   var day={
     date:new Date().toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'short',year:'2-digit'}),
     _raw:new Date().toDateString(),
@@ -416,22 +563,10 @@ function saveDay(){
   hist.unshift(day);
   if(hist.length>30)hist=hist.slice(0,30);
   setHist(hist);
-
-  // Re-render cards with new scores
   renderAll();
-
   var ok=document.getElementById('saveOk');
-  var btn=document.querySelector('.save-btn');
   ok.style.display='block';
-  btn.textContent='✓ GUARDADO';
-  btn.style.background='var(--g)';
-  btn.style.color='var(--bg)';
-  setTimeout(function(){
-    ok.style.display='none';
-    btn.textContent='💾  GUARDAR DÍA';
-    btn.style.background='var(--b)';
-    btn.style.color='#fff';
-  },2200);
+  setTimeout(function(){ok.style.display='none';},2200);
 }
 
 // ── NAV ───────────────────────────────────────────────────────
@@ -444,189 +579,12 @@ function goTab(n){
   if(n==='hist')renderHist();
 }
 
-// ── AUTO MARKET DATA ──────────────────────────────────────────
-var SYMBOLS = {
-  BTC:'BTCUSDT', ETH:'ETHUSDT', SOL:'SOLUSDT',
-  LINK:'LINKUSDT', XRP:'XRPUSDT', HBAR:'HBARUSDT',
-  AAVE:'AAVEUSDT', NEAR:'NEARUSDT', GRT:'GRTUSDT', DOT:'DOTUSDT'
-};
-
-function calcRSI(closes){
-  // 14-period RSI from array of close prices
-  if(closes.length<15) return 50;
-  var gains=0, losses=0;
-  for(var i=closes.length-14;i<closes.length;i++){
-    var diff=closes[i]-closes[i-1];
-    if(diff>0) gains+=diff; else losses+=Math.abs(diff);
-  }
-  var avgG=gains/14, avgL=losses/14;
-  if(avgL===0) return 100;
-  var rs=avgG/avgL;
-  return Math.round(100-(100/(1+rs)));
-}
-
-function calcTrend(closes){
-  if(closes.length<8) return 'lateral';
-  var cur=closes[closes.length-1];
-  var week=closes[closes.length-8];
-  var pct=(cur-week)/week*100;
-  if(pct>3) return 'alcista';
-  if(pct<-3) return 'bajista';
-  return 'lateral';
-}
-
-function calcVol(volumes){
-  if(volumes.length<8) return 'normal';
-  var cur=volumes[volumes.length-1];
-  var avg=volumes.slice(-8,-1).reduce(function(a,b){return a+b;},0)/7;
-  if(avg===0) return 'normal';
-  var ratio=cur/avg;
-  if(ratio>1.4) return 'alto';
-  if(ratio<0.65) return 'bajo';
-  return 'normal';
-}
-
-function fetchToken(sym){
-  var pair=SYMBOLS[sym];
-  if(!pair) return Promise.resolve(null);
-  // Binance public API — no auth needed
-  var url='https://api.binance.com/api/v3/klines?symbol='+pair+'&interval=1d&limit=20';
-  return fetch(url,{signal:AbortSignal.timeout(8000)})
-    .then(function(r){return r.json();})
-    .then(function(data){
-      if(!Array.isArray(data)||data.length<2) return null;
-      var closes=data.map(function(k){return parseFloat(k[4]);});
-      var vols=data.map(function(k){return parseFloat(k[5]);});
-      return{
-        rsi: calcRSI(closes),
-        trend: calcTrend(closes),
-        vol: calcVol(vols),
-        price: closes[closes.length-1] // also get latest price as bonus
-      };
-    })
-    .catch(function(){return null;});
-}
-
-function fetchAllMarketData(){
-  var btn=document.getElementById('fetchBtn');
-  btn.textContent='⟳  CARGANDO...';
-  btn.disabled=true;
-
-  var promises=TK.map(function(t){
-    return fetchToken(t.sym).then(function(d){
-      return{sym:t.sym,data:d};
-    });
-  });
-
-  Promise.all(promises).then(function(results){
-    var updated=0;
-    results.forEach(function(res){
-      if(!res.data) return;
-      var t=TK.filter(function(x){return x.sym===res.sym;})[0];
-      if(!t) return;
-
-      // Update ALL fields including price
-      t.rsi=res.data.rsi;
-      t.trend=res.data.trend;
-      t.vol=res.data.vol;
-      t.price=res.data.price;
-      updated++;
-
-      // Update inputs
-      var pi=document.getElementById('p_'+t.sym);
-      var ri=document.getElementById('r_'+t.sym);
-      var ti=document.getElementById('t_'+t.sym);
-      var vi=document.getElementById('v_'+t.sym);
-      if(pi) pi.value=res.data.price.toFixed(res.data.price<1?5:res.data.price<10?4:res.data.price<1000?2:0);
-      if(ri) ri.value=res.data.rsi;
-      if(ti) ti.value=res.data.trend;
-      if(vi) vi.value=res.data.vol;
-
-      // Update price display
-      var p=res.data.price;
-      var pFmt=p>=1000?'$'+Math.round(p).toLocaleString('en-US'):p>=1?'$'+p.toFixed(2):'$'+p.toFixed(5);
-      var pnl=p>0&&t.be>0?(p/t.be-1)*100:null;
-      var pnlTxt=pnl!==null?(pnl>=0?'🟢 +'+pnl.toFixed(1)+'% vs BE':'🔴 '+pnl.toFixed(1)+'% del BE'):'Sin precio';
-      var pnlCol=pnl!==null?(pnl>=0?'var(--g)':'var(--r)'):'var(--txt3)';
-      var tpEl=document.getElementById('tp_'+t.sym);
-      var tpnlEl=document.getElementById('tpnl_'+t.sym);
-      if(tpEl) tpEl.textContent=pFmt;
-      if(tpnlEl){tpnlEl.textContent=pnlTxt;tpnlEl.style.color=pnlCol;}
-    });
-
-    // Refresh scores/decisions
-    refreshScores();
-
-    btn.textContent='✓ TODO ACTUALIZADO — '+updated+' tokens';
-    btn.style.background='var(--g)';
-    btn.style.color='var(--bg)';
-    btn.disabled=false;
-
-    var ok=document.getElementById('fetchOk');
-    ok.style.display='block';
-    setTimeout(function(){
-      ok.style.display='none';
-      btn.textContent='⟳  AUTO-ACTUALIZAR PRECIO · RSI · TENDENCIA · VOLUMEN';
-      btn.style.background='#1a3a5a';
-      btn.style.color='var(--txt)';
-    },3000);
-  }).catch(function(){
-    btn.textContent='⟳  AUTO-ACTUALIZAR PRECIO · RSI · TENDENCIA · VOLUMEN';
-    btn.disabled=false;
-  });
-}
-
-// Refresh only scores/momentum bars/decisions without touching inputs
-function refreshScores(){
-  TK.forEach(function(t){
-    readInputsFor(t);
-    var sc=score(t);
-    var col=scoreColor(sc);
-    var cls=scoreClass(sc);
-    var dec=decision(t,sc);
-
-    // Update card class
-    var card=document.getElementById('tc_'+t.sym);
-    if(card) card.className='tc '+cls;
-
-    // Update momentum bar
-    var bar=document.getElementById('mb_'+t.sym);
-    if(bar){
-      var fillGrad=sc>=75?'linear-gradient(90deg,var(--g),#00ffb0)':sc>=50?'linear-gradient(90deg,var(--y),#ffd000)':sc>=30?'linear-gradient(90deg,var(--txt2),#7080a0)':'linear-gradient(90deg,var(--r),#ff8090)';
-      bar.style.width=sc+'%';
-      bar.style.background=fillGrad;
-    }
-    var ms=document.getElementById('ms_'+t.sym);
-    if(ms){ms.textContent=sc+'/100';ms.style.color=col;}
-
-    // Update decision
-    var dbox=document.getElementById('db_'+t.sym);
-    if(dbox){
-      dbox.className='dec '+dec.cls;
-      var dlbl=dbox.querySelector('.dec-lbl');
-      var dtxt=dbox.querySelector('.dec-txt');
-      if(dlbl)dlbl.textContent=dec.lbl;
-      if(dtxt)dtxt.textContent=dec.txt;
-    }
-  });
-  updateGlobalScore();
-}
-
-function readInputsFor(t){
-  var pi=document.getElementById('p_'+t.sym);
-  var ri=document.getElementById('r_'+t.sym);
-  var ti=document.getElementById('t_'+t.sym);
-  var vi=document.getElementById('v_'+t.sym);
-  if(pi&&pi.value) t.price=parseFloat(pi.value);
-  if(ri&&ri.value) t.rsi=parseFloat(ri.value);
-  if(ti) t.trend=ti.value;
-  if(vi) t.vol=vi.value;
-}
-
 // ── INIT ─────────────────────────────────────────────────────
 document.getElementById('hdate').textContent=
   new Date().toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'});
 renderAll();
+// Auto-fetch precios al arrancar
+setTimeout(autoFetch,500);
 </script>
 </body>
 </html>
