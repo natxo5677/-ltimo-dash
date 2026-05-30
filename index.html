@@ -19,7 +19,6 @@
   --r:#ff4060;--rbg:rgba(255,64,96,.07);--rbdr:rgba(255,64,96,.2);
   --y:#ffb800;--ybg:rgba(255,184,0,.07);--ybdr:rgba(255,184,0,.2);
   --b:#4d8aff;--bbg:rgba(77,138,255,.07);--bbdr:rgba(77,138,255,.2);
-  --p:#af52de;
 }
 body{background:var(--bg);color:var(--txt);font-family:'Syne',sans-serif;min-height:100vh;padding-bottom:32px}
 
@@ -27,16 +26,24 @@ body{background:var(--bg);color:var(--txt);font-family:'Syne',sans-serif;min-hei
 .hdr{padding:16px 16px 12px;border-bottom:1px solid var(--border);background:rgba(7,9,15,.96);backdrop-filter:blur(20px);position:sticky;top:0;z-index:100}
 .hdr-brand{font-size:8px;font-weight:700;letter-spacing:4px;color:var(--txt3);margin-bottom:5px}
 .hdr-row{display:flex;justify-content:space-between;align-items:flex-start}
-.hdr-left .hdr-title{font-size:19px;font-weight:900;letter-spacing:-.3px}
-.hdr-left .hdr-date{font-size:9px;color:var(--txt3);margin-top:3px}
+.hdr-title{font-size:19px;font-weight:900;letter-spacing:-.3px}
+.hdr-date{font-size:9px;color:var(--txt3);margin-top:3px}
 .hdr-right{text-align:right}
 .global-score{font-size:30px;font-weight:900;font-family:'Space Mono',monospace;line-height:1}
-.live-pill{display:inline-flex;align-items:center;gap:4px;font-size:8px;font-weight:700;padding:2px 8px;border-radius:10px;margin-top:5px;letter-spacing:.5px}
-.live-pill.on{background:var(--gbg);color:var(--g);border:1px solid var(--gbdr)}
-.live-pill.off{background:var(--bg4);color:var(--txt3);border:1px solid var(--border2)}
-.live-pill.loading{background:var(--bbg);color:var(--b);border:1px solid var(--bbdr)}
-.dot-pulse{width:5px;height:5px;border-radius:50%;background:var(--g);animation:dp 1.8s infinite}
+.status-row{display:flex;gap:6px;margin-top:5px;flex-wrap:wrap;justify-content:flex-end}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:8px;font-weight:700;padding:2px 8px;border-radius:10px;letter-spacing:.5px}
+.pill.on{background:var(--gbg);color:var(--g);border:1px solid var(--gbdr)}
+.pill.off{background:var(--bg4);color:var(--txt3);border:1px solid var(--border2)}
+.pill.loading{background:var(--bbg);color:var(--b);border:1px solid var(--bbdr)}
+.pill.warn{background:var(--ybg);color:var(--y);border:1px solid var(--ybdr)}
+.dot-live{width:5px;height:5px;border-radius:50%;background:var(--g);animation:dp 1.8s infinite;display:inline-block}
 @keyframes dp{0%{box-shadow:0 0 0 0 rgba(0,232,160,.5)}70%{box-shadow:0 0 0 5px rgba(0,232,160,0)}100%{box-shadow:0 0 0 0 rgba(0,232,160,0)}}
+
+/* FETCH STATUS BAR */
+.status-bar{padding:8px 16px;font-size:10px;font-weight:700;text-align:center;display:none;letter-spacing:.5px}
+.status-bar.ok{display:block;background:var(--gbg);color:var(--g);border-bottom:1px solid var(--gbdr)}
+.status-bar.err{display:block;background:var(--rbg);color:var(--r);border-bottom:1px solid var(--rbdr)}
+.status-bar.loading{display:block;background:var(--bbg);color:var(--b);border-bottom:1px solid var(--bbdr)}
 
 /* TABS */
 .tabs{display:flex;background:var(--bg2);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
@@ -44,11 +51,6 @@ body{background:var(--bg);color:var(--txt);font-family:'Syne',sans-serif;min-hei
 .tab{flex-shrink:0;padding:11px 18px;font-size:10px;font-weight:700;letter-spacing:2px;cursor:pointer;border:none;background:transparent;color:var(--txt3);font-family:'Syne',sans-serif;border-bottom:2px solid transparent;transition:all .2s}
 .tab.active{color:var(--txt);border-bottom-color:var(--b)}
 .view{display:none}.view.active{display:block}
-
-/* FETCH BAR */
-.fetch-bar{padding:8px 16px;font-size:10px;font-weight:700;letter-spacing:.5px;text-align:center;display:none}
-.fetch-bar.ok{display:block;background:var(--gbg);color:var(--g);border-bottom:1px solid var(--gbdr)}
-.fetch-bar.err{display:block;background:var(--rbg);color:var(--r);border-bottom:1px solid var(--rbdr)}
 
 /* TOKEN LIST */
 .tlist{display:flex;flex-direction:column;gap:10px;padding:14px}
@@ -60,9 +62,9 @@ body{background:var(--bg);color:var(--txt);font-family:'Syne',sans-serif;min-hei
 
 /* HEAD */
 .tc-head{display:flex;align-items:center;gap:10px;padding:13px 14px 8px}
-.tc-ico{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;letter-spacing:.3px}
+.tc-ico{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0}
 .tc-info{flex:1;min-width:0}
-.tc-sym{font-size:16px;font-weight:900;letter-spacing:.2px}
+.tc-sym{font-size:16px;font-weight:900}
 .tc-phase{font-size:8px;font-weight:700;letter-spacing:1px;color:var(--txt3);margin-top:3px;text-transform:uppercase}
 .tc-right{text-align:right;flex-shrink:0}
 .tc-price{font-size:17px;font-weight:700;font-family:'Space Mono',monospace}
@@ -70,7 +72,7 @@ body{background:var(--bg);color:var(--txt);font-family:'Syne',sans-serif;min-hei
 .tc-pnl{font-size:10px;font-weight:700;margin-top:3px;font-family:'Space Mono',monospace}
 .tc-tag{font-size:8px;font-weight:700;padding:1px 6px;border-radius:4px;display:inline-block;margin-top:3px}
 
-/* MOMENTUM BAR */
+/* MOMENTUM */
 .mom{padding:0 14px 8px}
 .mom-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
 .mom-lbl{font-size:8px;font-weight:700;letter-spacing:2px;color:var(--txt3)}
@@ -84,7 +86,7 @@ body{background:var(--bg);color:var(--txt);font-family:'Syne',sans-serif;min-hei
 .tp1-lbl{font-size:8px;font-weight:700;letter-spacing:2px;color:var(--txt3)}
 .tp1-val{font-size:10px;font-weight:700;font-family:'Space Mono',monospace}
 .tp1-track{height:10px;background:var(--bg4);border-radius:5px;overflow:hidden;position:relative;margin-bottom:4px}
-.tp1-fill{height:100%;border-radius:5px;transition:width .7s;position:relative}
+.tp1-fill{height:100%;border-radius:5px;transition:width .7s}
 .tp1-be-mark{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,255,255,.25);border-radius:1px}
 .tp1-labs{display:flex;justify-content:space-between;font-size:8px;color:var(--txt3);font-family:'Space Mono',monospace}
 
@@ -92,7 +94,9 @@ body{background:var(--bg);color:var(--txt);font-family:'Syne',sans-serif;min-hei
 .mas{padding:0 14px 8px}
 .mas-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
 .mas-lbl{font-size:8px;font-weight:700;letter-spacing:2px;color:var(--txt3)}
-.mas-tf{font-size:8px;font-weight:700;padding:1px 6px;border-radius:4px;background:var(--bbg);color:var(--b);border:1px solid var(--bbdr)}
+.mas-src{font-size:8px;font-weight:700;padding:1px 6px;border-radius:4px}
+.mas-src.auto{background:var(--gbg);color:var(--g);border:1px solid var(--gbdr)}
+.mas-src.manual{background:var(--bg4);color:var(--txt3);border:1px solid var(--border2)}
 .mas-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:6px}
 .ma-box{background:var(--bg3);border-radius:7px;padding:8px;border:1px solid var(--border)}
 .ma-box.above{border-color:rgba(0,232,160,.25)}
@@ -129,38 +133,12 @@ body{background:var(--bg);color:var(--txt);font-family:'Syne',sans-serif;min-hei
 /* NOTE */
 .tc-note{padding:8px 14px 12px;font-size:10px;color:var(--txt3);line-height:1.6;border-top:1px solid var(--border)}
 
-/* INPUTS COLLAPSIBLE */
-.inp-wrap{border-top:1px solid var(--border)}
-.inp-toggle{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;cursor:pointer;user-select:none}
-.inp-toggle-lbl{font-size:8px;font-weight:700;letter-spacing:2px;color:var(--txt3);text-transform:uppercase}
-.inp-toggle-chev{font-size:9px;color:var(--txt3);transition:transform .3s}
-.inp-toggle-chev.open{transform:rotate(180deg)}
-.inp-panel{display:none;padding:4px 14px 12px}
-.inp-panel.open{display:block}
-.inp-group-title{font-size:7px;font-weight:700;letter-spacing:2px;color:var(--txt3);text-transform:uppercase;margin:10px 0 6px;display:flex;align-items:center;gap:8px}
-.inp-group-title::after{content:'';flex:1;height:1px;background:var(--border)}
-.inp-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.inp-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px}
-.inp-field{background:var(--bg4);border:1px solid var(--border2);border-radius:8px;padding:8px 10px}
-.inp-field-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;cursor:pointer}
-.inp-field-lbl{font-size:7px;font-weight:700;letter-spacing:1.5px;color:var(--txt3);text-transform:uppercase}
-.inp-field-chev{font-size:8px;color:var(--txt3);transition:transform .2s}
-.inp-field-chev.open{transform:rotate(180deg)}
-.inp-f{width:100%;background:transparent;border:none;color:var(--txt);font-size:13px;font-weight:700;font-family:'Space Mono',monospace;outline:none;-webkit-appearance:none}
-.inp-f::placeholder{color:var(--txt3)}
-.inp-sel{width:100%;background:transparent;border:none;color:var(--txt);font-size:12px;font-weight:700;font-family:'Syne',sans-serif;outline:none;-webkit-appearance:none}
-.inp-sel option{background:var(--bg3)}
-.inp-explain{display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
-.inp-explain.open{display:block}
-.inp-explain-desc{font-size:10px;color:var(--txt3);line-height:1.6;margin-bottom:6px}
-.inp-explain-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:4px}
-.inp-explain-range{font-size:9px;font-family:'Space Mono',monospace;color:var(--txt2);flex-shrink:0;min-width:110px}
-.inp-explain-lbl{font-size:9px;color:var(--txt3);line-height:1.4}
-
 /* SAVE BAR */
 .save-bar{padding:12px 14px 16px;display:flex;flex-direction:column;gap:8px}
-.btn-fetch{padding:11px;border:1px solid var(--bbdr);border-radius:9px;color:var(--b);background:var(--bbg);font-size:10px;font-weight:700;letter-spacing:2px;cursor:pointer;font-family:'Syne',sans-serif;text-align:center}
-.btn-save{padding:12px;background:var(--b);border:none;border-radius:9px;color:#fff;font-size:11px;font-weight:700;letter-spacing:2px;cursor:pointer;font-family:'Syne',sans-serif;text-align:center}
+.btn{padding:12px;border-radius:9px;font-size:10px;font-weight:700;letter-spacing:2px;cursor:pointer;font-family:'Syne',sans-serif;text-align:center;border:none}
+.btn-prices{background:var(--bbg);color:var(--b);border:1px solid var(--bbdr)}
+.btn-ma{background:var(--gbg);color:var(--g);border:1px solid var(--gbdr)}
+.btn-save{background:var(--b);color:#fff}
 .save-ok{display:none;text-align:center;font-size:10px;color:var(--g);padding:4px;letter-spacing:1px}
 
 /* SUMMARY */
@@ -190,8 +168,8 @@ body{background:var(--bg);color:var(--txt);font-family:'Syne',sans-serif;min-hei
 .hday-row:last-child{border:none}
 .hr-sym{font-size:11px;font-weight:800;width:32px;flex-shrink:0}
 .hr-price{font-size:9px;font-family:'Space Mono',monospace;width:58px;flex-shrink:0}
+.hr-rsi{font-size:9px;font-family:'Space Mono',monospace;width:38px;color:var(--txt3);flex-shrink:0}
 .hr-ma20{font-size:9px;font-family:'Space Mono',monospace;width:54px;color:var(--txt3);flex-shrink:0}
-.hr-vol{font-size:9px;font-family:'Space Mono',monospace;width:46px;color:var(--txt3);flex-shrink:0}
 .hr-score{font-size:10px;font-weight:700;font-family:'Space Mono',monospace;flex:1;text-align:right}
 .hr-dec{font-size:8px;font-weight:700;padding:2px 5px;border-radius:4px;flex-shrink:0}
 
@@ -204,16 +182,21 @@ body{background:var(--bg);color:var(--txt);font-family:'Syne',sans-serif;min-hei
 <div class="hdr">
   <div class="hdr-brand">◈ TOKEN INTELLIGENCE</div>
   <div class="hdr-row">
-    <div class="hdr-left">
+    <div>
       <div class="hdr-title">Análisis de Momento</div>
       <div class="hdr-date" id="hdate"></div>
-      <div class="live-pill loading" id="livePill">⟳ CARGANDO</div>
     </div>
     <div class="hdr-right">
       <div class="global-score" id="gScore" style="color:var(--y)">—</div>
+      <div class="status-row">
+        <div class="pill off" id="pillPrice">◉ PRECIOS</div>
+        <div class="pill off" id="pillMA">◉ MAs/RSI</div>
+      </div>
     </div>
   </div>
 </div>
+
+<div class="status-bar" id="statusBar"></div>
 
 <div class="tabs">
   <button class="tab active" id="tab-tokens" onclick="goTab('tokens')">TOKENS</button>
@@ -222,11 +205,11 @@ body{background:var(--bg);color:var(--txt);font-family:'Syne',sans-serif;min-hei
 </div>
 
 <div class="view active" id="view-tokens">
-  <div class="fetch-bar" id="fetchBar"></div>
   <div class="tlist" id="tlist"></div>
   <div class="save-bar">
-    <div class="btn-fetch" id="fetchBtn" onclick="fetchPrices()">⟳  ACTUALIZAR PRECIOS EN VIVO</div>
-    <div class="btn-save" onclick="saveDay()">💾  GUARDAR DÍA</div>
+    <div class="btn btn-prices" id="btnPrices" onclick="fetchPrices()">⚡  ACTUALIZAR PRECIOS — CoinGecko</div>
+    <div class="btn btn-ma" id="btnMA" onclick="fetchTechnicals()">📊  ACTUALIZAR MAs Y RSI — Automático</div>
+    <div class="btn btn-save" onclick="saveDay()">💾  GUARDAR DÍA</div>
     <div class="save-ok" id="saveOk">✓ Guardado correctamente</div>
   </div>
 </div>
@@ -249,171 +232,90 @@ body{background:var(--bg);color:var(--txt);font-family:'Syne',sans-serif;min-hei
 
 <script>
 // ═══════════════════════════════════════════════════════════════
-// TOKENS — datos con charts 12H de Kraken (29 May 2026, ~00:30)
+// TOKEN DATA
 // ═══════════════════════════════════════════════════════════════
 var TK = [
-  {
-    sym:'BTC', name:'Bitcoin', color:'#f7931a', cgId:'bitcoin',
-    be:88402.79, tp1:110000,
-    narr:68, phase:'FASE 1 TARDÍA',
-    cats:[
-      {n:'Reserva estratégica EEUU',s:1},
-      {n:'ETF AUM $60B',s:1},
-      {n:'Warsh Fed dovish',s:null},
-      {n:'Rompe MA200 $82.4K',s:0}
-    ],
-    note:'Consolida $72-74K. RSI 31 en 12H — casi sobreventa. Dark pool $1.3B IBIT vendido el 26 mayo. Soporte crítico $72.4K. Necesita recuperar MA200 ($82.4K) para activar Fase 2.',
-    price:73574, rsi:31, trend:'bajista', vol:'bajo',
-    sma9:76280, ma20:76864, ma50:78508, volDia:1390
-  },
-  {
-    sym:'ETH', name:'Ethereum', color:'#627eea', cgId:'ethereum',
-    be:2862.79, tp1:4000,
-    narr:50, phase:'MÁS REZAGADO',
-    cats:[
-      {n:'ETH ETF staking yield',s:null},
-      {n:'EigenLayer creciendo',s:1},
-      {n:'ETH/BTC gira >0.032',s:0},
-      {n:'CLARITY Act commodity',s:null}
-    ],
-    note:'ETH/BTC en mínimos históricos (0.027). RSI 34 — sobreventa técnica. Precio por debajo de todas las MAs con fuerte pendiente bajista. Necesita dominancia BTC < 58% para despertar.',
-    price:2008, rsi:34, trend:'bajista', vol:'bajo',
-    sma9:2089, ma20:2112, ma50:2205, volDia:15800
-  },
-  {
-    sym:'SOL', name:'Solana', color:'#9945ff', cgId:'solana',
-    be:116.52, tp1:150,
-    narr:72, phase:'ESPERANDO FASE 2',
-    cats:[
-      {n:'USDF Coinbase en Solana',s:1},
-      {n:'Alpenglow mainnet',s:null},
-      {n:'ETF inflows continuos',s:1},
-      {n:'Altseason Index >50',s:0}
-    ],
-    note:'Ecosistema más activo. USDF lanzada. Alpenglow upgrade en testnet. -30% del BE. Sube con la marea general. Sin catalizador propio inmediato.',
-    price:82.12, rsi:40, trend:'bajista', vol:'bajo',
-    sma9:84.58, ma20:85.22, ma50:87.81, volDia:102220
-  },
-  {
-    sym:'LINK', name:'Chainlink', color:'#375bd2', cgId:'chainlink',
-    be:10.19, tp1:20,
-    narr:88, phase:'CATALIZADORES ACTIVOS',
-    cats:[
-      {n:'Mastercard 3.5B usuarios',s:1},
-      {n:'SWIFT CCIP live junio',s:1},
-      {n:'CLARITY Act firmada',s:0},
-      {n:'Ballenas récord — 805 wallets',s:1}
-    ],
-    note:'Mastercard integración (26 mayo). Ballenas en récord histórico acumulando. Divergencia precio/fundamentales extrema. Precio deprimido esperando catalizador regulatorio.',
-    price:8.97, rsi:38, trend:'bajista', vol:'normal',
-    sma9:9.435, ma20:9.536, ma50:9.814, volDia:97180
-  },
-  {
-    sym:'XRP', name:'Ripple', color:'#00aae4', cgId:'ripple',
-    be:1.94, tp1:3,
-    narr:82, phase:'BLOQUEADO — ESPERA LEY',
-    cats:[
-      {n:'SWIFT 25+ bancos junio',s:1},
-      {n:'Japón FIEA parlamento',s:null},
-      {n:'CLARITY Act firmada',s:0},
-      {n:'ETF Grayscale pendiente',s:null}
-    ],
-    note:'SWIFT live junio con 25+ bancos. $21.7B japoneses en XRP. RLUSD live. El más binario de la cartera — CLARITY Act lo desbloquea todo. +0.92% hoy, pequeño rebote.',
-    price:1.315, rsi:39, trend:'bajista', vol:'bajo',
-    sma9:1.34492, ma20:1.36253, ma50:1.39327, volDia:12250000
-  },
-  {
-    sym:'HBAR', name:'Hedera', color:'#8e9494', cgId:'hedera-hashgraph',
-    be:0.09904, tp1:0.18,
-    narr:82, phase:'ENTERPRISE ACTIVO',
-    cats:[
-      {n:'Georgia registro inmobiliario',s:1},
-      {n:'15 ETFs SEC revisión',s:1},
-      {n:'Canary HBAR ETF listado',s:1},
-      {n:'CLARITY Act commodity',s:0}
-    ],
-    note:'⚡ HBAR sobre todas las MAs. +7.32% hoy con volumen récord 26.56M. Canary ETF ya listado con 549M HBAR. Google, IBM, Boeing. Solo -8% del BE. El más fuerte técnicamente.',
-    price:0.09174, rsi:57, trend:'alcista', vol:'alto',
-    sma9:0.08815, ma20:0.08884, ma50:0.09062, volDia:26560000
-  },
-  {
-    sym:'AAVE', name:'Aave', color:'#b6509e', cgId:'aave',
-    be:136.07, tp1:300,
-    narr:46, phase:'RECUPERACIÓN POST-HACK',
-    cats:[
-      {n:'Hack rsETH resuelto',s:1},
-      {n:'CLARITY Act DeFi legal',s:0},
-      {n:'Yields bono <4%',s:0},
-      {n:'Aave v4 lanzamiento',s:null}
-    ],
-    note:'Hack de abril resuelto. RSI 33 — sobreventa. Todas las MAs bajando con fuerza. -41% del BE. Necesita yields bajos + CLARITY Act + confianza DeFi. El más paciente.',
-    price:80.93, rsi:33, trend:'bajista', vol:'bajo',
-    sma9:85.98, ma20:87.33, ma50:91.16, volDia:4480
-  },
-  {
-    sym:'NEAR', name:'NEAR Protocol', color:'#00c08b', cgId:'near',
-    be:1.37, tp1:5,
-    narr:90, phase:'MOMENTUM AI PROPIO',
-    cats:[
-      {n:'Dynamic Resharding junio',s:1},
-      {n:'ETF Grayscale S-1 presentado',s:1},
-      {n:'Arthur Hayes "holy trinity"',s:1},
-      {n:'Confidential GPU Marketplace',s:1}
-    ],
-    note:'⚡ NEAR sobre las tres MAs en perfecta alineación alcista. +70% sobre BE. Corrección -4.7% tras +54% semanal — completamente normal. Dynamic Resharding junio. ETF Grayscale pendiente.',
-    price:2.435, rsi:62, trend:'alcista', vol:'alto',
-    sma9:2.2139, ma20:2.0202, ma50:1.7912, volDia:3370000
-  },
-  {
-    sym:'GRT', name:'The Graph', color:'#6747ed', cgId:'the-graph',
-    be:0.03421, tp1:0.11,
-    narr:74, phase:'DORMIDO — FASE 3',
-    cats:[
-      {n:'Horizon mainnet 2026',s:1},
-      {n:'Narrativa AI datos',s:1},
-      {n:'Altseason Index >65',s:0},
-      {n:'Retail entrada masiva',s:0}
-    ],
-    note:'Precio justo bajo MA50 — zona de soporte/resistencia clave. RSI 50 — neutral. 11.94% APY acumulando. De $0.10 a $2.88 en 2021 en altseason. Interesante técnicamente.',
-    price:0.02655, rsi:50, trend:'lateral', vol:'normal',
-    sma9:0.02630, ma20:0.02594, ma50:0.02659, volDia:4460000
-  },
-  {
-    sym:'DOT', name:'Polkadot', color:'#e6007a', cgId:'polkadot',
-    be:1.53, tp1:3,
-    narr:55, phase:'SUBE CON LA MAREA',
-    cats:[
-      {n:'JAM upgrade lanzamiento',s:null},
-      {n:'Staking 5.49% APY',s:1},
-      {n:'Altseason confirmada',s:0},
-      {n:'Nuevas parachains',s:null}
-    ],
-    note:'5.49% APY de suelo natural. Sin catalizadores propios fuertes. Todas las MAs por encima. Sube cuando la altseason general llega. JAM upgrade como narrativa renovada.',
-    price:1.2138, rsi:44, trend:'bajista', vol:'bajo',
-    sma9:1.2507, ma20:1.2568, ma50:1.2879, volDia:165670
-  }
+  {sym:'BTC',  cgId:'bitcoin',          cgHistId:'bitcoin',          be:88402.79, tp1:110000, color:'#f7931a',
+   narr:68, phase:'FASE 1 TARDÍA',
+   cats:[{n:'Reserva estratégica EEUU',s:1},{n:'ETF AUM $60B',s:1},{n:'Warsh Fed dovish',s:null},{n:'Rompe MA200 $82.4K',s:0}],
+   note:'Consolida $72-75K. Necesita recuperar MA200 ($82.4K) para activar Fase 2. Dark pool $1.3B IBIT vendido en mayo.',
+   price:0, rsi:36, trend:'bajista', vol:'bajo', sma9:0, ma20:0, ma50:0, volDia:0, maAuto:false},
+
+  {sym:'ETH',  cgId:'ethereum',         cgHistId:'ethereum',         be:2862.79,  tp1:4000,   color:'#627eea',
+   narr:50, phase:'MÁS REZAGADO',
+   cats:[{n:'ETH ETF staking yield',s:null},{n:'EigenLayer creciendo',s:1},{n:'ETH/BTC gira >0.032',s:0},{n:'CLARITY Act commodity',s:null}],
+   note:'ETH/BTC en mínimos históricos. RSI en sobreventa. Necesita dominancia BTC < 58% para despertar.',
+   price:0, rsi:34, trend:'bajista', vol:'bajo', sma9:0, ma20:0, ma50:0, volDia:0, maAuto:false},
+
+  {sym:'SOL',  cgId:'solana',           cgHistId:'solana',           be:116.52,   tp1:150,    color:'#9945ff',
+   narr:72, phase:'ESPERANDO FASE 2',
+   cats:[{n:'USDF Coinbase en Solana',s:1},{n:'Alpenglow mainnet',s:null},{n:'ETF inflows continuos',s:1},{n:'Altseason Index >50',s:0}],
+   note:'Ecosistema más activo. USDF lanzada. Alpenglow en testnet. Sube con la marea general.',
+   price:0, rsi:40, trend:'bajista', vol:'bajo', sma9:0, ma20:0, ma50:0, volDia:0, maAuto:false},
+
+  {sym:'LINK', cgId:'chainlink',        cgHistId:'chainlink',        be:10.19,    tp1:20,     color:'#375bd2',
+   narr:88, phase:'CATALIZADORES ACTIVOS',
+   cats:[{n:'Mastercard 3.5B usuarios',s:1},{n:'SWIFT CCIP live junio',s:1},{n:'CLARITY Act firmada',s:0},{n:'Ballenas récord — 805 wallets',s:1}],
+   note:'Mastercard integración (26 mayo). Ballenas en récord acumulando. Divergencia precio/fundamentales extrema.',
+   price:0, rsi:42, trend:'bajista', vol:'normal', sma9:0, ma20:0, ma50:0, volDia:0, maAuto:false},
+
+  {sym:'XRP',  cgId:'ripple',           cgHistId:'ripple',           be:1.94,     tp1:3,      color:'#00aae4',
+   narr:82, phase:'BLOQUEADO — ESPERA LEY',
+   cats:[{n:'SWIFT 25+ bancos junio',s:1},{n:'Japón FIEA parlamento',s:null},{n:'CLARITY Act firmada',s:0},{n:'ETF Grayscale pendiente',s:null}],
+   note:'SWIFT live junio con 25+ bancos. $21.7B japoneses. RLUSD live. Token más binario — CLARITY Act lo desbloquea todo.',
+   price:0, rsi:40, trend:'bajista', vol:'bajo', sma9:0, ma20:0, ma50:0, volDia:0, maAuto:false},
+
+  {sym:'HBAR', cgId:'hedera-hashgraph', cgHistId:'hedera-hashgraph', be:0.09904,  tp1:0.18,   color:'#00c8a0',
+   narr:82, phase:'ENTERPRISE ACTIVO',
+   cats:[{n:'Georgia registro inmobiliario',s:1},{n:'15 ETFs SEC revisión',s:1},{n:'Canary HBAR ETF listado',s:1},{n:'CLARITY Act commodity',s:0}],
+   note:'⚡ Tocó $0.10998 hoy — superó el BE. 15 ETFs en revisión SEC. Canary ETF listado con 549M HBAR. El más fuerte técnicamente.',
+   price:0, rsi:60, trend:'alcista', vol:'alto', sma9:0.09125, ma20:0.09114, ma50:0.09024, volDia:35770000, maAuto:false},
+
+  {sym:'AAVE', cgId:'aave',            cgHistId:'aave',             be:136.07,   tp1:300,    color:'#b6509e',
+   narr:46, phase:'RECUPERACIÓN POST-HACK',
+   cats:[{n:'Hack rsETH resuelto',s:1},{n:'CLARITY Act DeFi legal',s:0},{n:'Yields bono <4%',s:0},{n:'Aave v4 lanzamiento',s:null}],
+   note:'Hack de abril resuelto. RSI en sobreventa. Necesita yields bajos + CLARITY Act + confianza DeFi.',
+   price:0, rsi:33, trend:'bajista', vol:'bajo', sma9:0, ma20:0, ma50:0, volDia:0, maAuto:false},
+
+  {sym:'NEAR', cgId:'near',            cgHistId:'near',             be:1.37,     tp1:5,      color:'#00c08b',
+   narr:90, phase:'MOMENTUM AI PROPIO',
+   cats:[{n:'Dynamic Resharding junio',s:1},{n:'ETF Grayscale S-1 presentado',s:1},{n:'Arthur Hayes "holy trinity"',s:1},{n:'Confidential GPU Marketplace',s:1}],
+   note:'+70% sobre BE. El más fuerte de la cartera. Dynamic Resharding junio. ETF Grayscale pendiente.',
+   price:0, rsi:62, trend:'alcista', vol:'alto', sma9:0, ma20:0, ma50:0, volDia:0, maAuto:false},
+
+  {sym:'GRT',  cgId:'the-graph',        cgHistId:'the-graph',        be:0.03421,  tp1:0.11,   color:'#6747ed',
+   narr:74, phase:'DORMIDO — FASE 3',
+   cats:[{n:'Horizon mainnet 2026',s:1},{n:'Narrativa AI datos',s:1},{n:'Altseason Index >65',s:0},{n:'Retail entrada masiva',s:0}],
+   note:'11.94% APY acumulando. De $0.10 a $2.88 en 2021. RSI neutral. Esperando altseason general.',
+   price:0, rsi:50, trend:'lateral', vol:'normal', sma9:0, ma20:0, ma50:0, volDia:0, maAuto:false},
+
+  {sym:'DOT',  cgId:'polkadot',         cgHistId:'polkadot',         be:1.53,     tp1:3,      color:'#e6007a',
+   narr:55, phase:'SUBE CON LA MAREA',
+   cats:[{n:'JAM upgrade lanzamiento',s:null},{n:'Staking 5.49% APY',s:1},{n:'Altseason confirmada',s:0},{n:'Nuevas parachains',s:null}],
+   note:'5.49% APY de suelo. Sin catalizadores propios. Sube cuando llega la altseason general.',
+   price:0, rsi:44, trend:'bajista', vol:'bajo', sma9:0, ma20:0, ma50:0, volDia:0, maAuto:false}
 ];
 
 // ═══════════════════════════════════════════════════════════════
 // STORAGE
 // ═══════════════════════════════════════════════════════════════
-var STORE_KEY = 'ti_v3';
-var HIST_KEY  = 'ti_v3_hist';
+var STORE = 'ti_v4';
+var HIST  = 'ti_v4_hist';
 
 function loadSaved(){
   try{
-    var d = JSON.parse(localStorage.getItem(STORE_KEY)||'{}');
+    var d = JSON.parse(localStorage.getItem(STORE)||'{}');
     TK.forEach(function(t){
-      var s = d[t.sym];
-      if(!s) return;
-      if(s.price > 0)  t.price  = s.price;
-      if(s.rsi)        t.rsi    = s.rsi;
-      if(s.trend)      t.trend  = s.trend;
-      if(s.vol)        t.vol    = s.vol;
-      if(s.sma9 > 0)   t.sma9   = s.sma9;
-      if(s.ma20 > 0)   t.ma20   = s.ma20;
-      if(s.ma50 > 0)   t.ma50   = s.ma50;
-      if(s.volDia > 0) t.volDia = s.volDia;
+      var s = d[t.sym]; if(!s) return;
+      if(s.price>0)   t.price  = s.price;
+      if(s.rsi)       t.rsi    = s.rsi;
+      if(s.trend)     t.trend  = s.trend;
+      if(s.vol)       t.vol    = s.vol;
+      if(s.sma9>0)    t.sma9   = s.sma9;
+      if(s.ma20>0)    t.ma20   = s.ma20;
+      if(s.ma50>0)    t.ma50   = s.ma50;
+      if(s.volDia>0)  t.volDia = s.volDia;
+      if(s.maAuto)    t.maAuto = s.maAuto;
     });
   }catch(e){}
 }
@@ -421,44 +323,205 @@ function loadSaved(){
 function saveLocal(){
   var d = {};
   TK.forEach(function(t){
-    d[t.sym] = {price:t.price,rsi:t.rsi,trend:t.trend,vol:t.vol,
-                sma9:t.sma9,ma20:t.ma20,ma50:t.ma50,volDia:t.volDia};
+    d[t.sym]={price:t.price,rsi:t.rsi,trend:t.trend,vol:t.vol,
+               sma9:t.sma9,ma20:t.ma20,ma50:t.ma50,volDia:t.volDia,maAuto:t.maAuto};
   });
-  try{localStorage.setItem(STORE_KEY, JSON.stringify(d));}catch(e){}
+  try{localStorage.setItem(STORE,JSON.stringify(d));}catch(e){}
 }
 
-function getHist(){ try{return JSON.parse(localStorage.getItem(HIST_KEY)||'[]');}catch(e){return[];} }
-function setHist(h){ try{localStorage.setItem(HIST_KEY, JSON.stringify(h));}catch(e){} }
+function getHist(){ try{return JSON.parse(localStorage.getItem(HIST)||'[]');}catch(e){return[];} }
+function setHist(h){ try{localStorage.setItem(HIST,JSON.stringify(h));}catch(e){} }
+
+// ═══════════════════════════════════════════════════════════════
+// CALCULATIONS
+// ═══════════════════════════════════════════════════════════════
+function calcSMA(arr, n){
+  if(arr.length < n) return 0;
+  return arr.slice(-n).reduce(function(a,b){return a+b;},0)/n;
+}
+
+function calcRSI(closes){
+  if(closes.length < 15) return 50;
+  var gains=0, losses=0;
+  for(var i=closes.length-14; i<closes.length; i++){
+    var d = closes[i]-closes[i-1];
+    if(d>0) gains+=d; else losses+=Math.abs(d);
+  }
+  var avgG=gains/14, avgL=losses/14;
+  if(avgL===0) return 100;
+  return Math.min(99, Math.max(1, Math.round(100-(100/(1+avgG/avgL)))));
+}
+
+function classifyVol(todayVol, recentVols){
+  if(!todayVol||!recentVols.length) return 'normal';
+  var avg = recentVols.reduce(function(a,b){return a+b;},0)/recentVols.length;
+  if(avg===0) return 'normal';
+  var r = todayVol/avg;
+  return r>1.4?'alto':r<0.65?'bajo':'normal';
+}
+
+function fmtVol(v){
+  if(!v||v<=0) return '—';
+  if(v>=1e9)  return (v/1e9).toFixed(2)+'B';
+  if(v>=1e6)  return (v/1e6).toFixed(2)+'M';
+  if(v>=1e3)  return (v/1e3).toFixed(1)+'K';
+  return Math.round(v).toString();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// FETCH PRICES — CoinGecko simple price
+// ═══════════════════════════════════════════════════════════════
+function fetchPrices(){
+  var btn = document.getElementById('btnPrices');
+  btn.textContent = '⚡  CARGANDO PRECIOS...';
+  setStatus('loading','⟳ Actualizando precios desde CoinGecko...');
+  setPill('pillPrice','loading','⟳ PRECIOS');
+
+  var ids = TK.map(function(t){return t.cgId;}).join(',');
+  fetch('https://api.coingecko.com/api/v3/simple/price?ids='+ids+'&vs_currencies=usd&include_24hr_change=true',
+    {signal:AbortSignal.timeout(12000)})
+    .then(function(r){if(!r.ok)throw new Error(r.status);return r.json();})
+    .then(function(data){
+      var updated=0;
+      TK.forEach(function(t){
+        var d=data[t.cgId];
+        if(!d||!d.usd) return;
+        t.price=d.usd;
+        var ch=d.usd_24h_change||0;
+        var tag=document.getElementById('tag_'+t.sym);
+        if(tag){
+          tag.textContent='LIVE '+(ch>=0?'▲+':'▼')+Math.abs(ch).toFixed(1)+'%';
+          tag.style.background=ch>=0?'rgba(0,232,160,.12)':'rgba(255,64,96,.12)';
+          tag.style.color=ch>=0?'var(--g)':'var(--r)';
+        }
+        updatePriceDisplay(t);
+        updated++;
+      });
+      setStatus('ok','✓ '+updated+' precios actualizados · '+new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit',second:'2-digit'}));
+      btn.textContent='⚡  ACTUALIZAR PRECIOS — CoinGecko';
+      setPill('pillPrice','on','<span class="dot-live"></span> PRECIOS LIVE');
+      setTimeout(function(){setStatus('');},6000);
+      refreshAll();
+    })
+    .catch(function(e){
+      setStatus('err','✗ Error precios: '+e.message);
+      btn.textContent='⚡  ACTUALIZAR PRECIOS — CoinGecko';
+      setPill('pillPrice','warn','✗ PRECIOS ERROR');
+    });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// FETCH TECHNICALS — CoinGecko market_chart → RSI + MAs + Vol
+// ═══════════════════════════════════════════════════════════════
+var techQueue = [];
+var techResults = {};
+var techDone = 0;
+
+function fetchTechnicals(){
+  var btn = document.getElementById('btnMA');
+  btn.textContent = '📊  CALCULANDO...';
+  setStatus('loading','⟳ Descargando histórico de precios para calcular MAs y RSI... (puede tardar ~15s)');
+  setPill('pillMA','loading','⟳ MAs/RSI');
+  techDone=0; techResults={};
+
+  // Fetch one by one to avoid rate limiting
+  fetchNextTechnical(0, btn);
+}
+
+function fetchNextTechnical(idx, btn){
+  if(idx >= TK.length){
+    // All done
+    applyTechnicals();
+    btn.textContent='📊  ACTUALIZAR MAs Y RSI — Automático';
+    setPill('pillMA','on','<span class="dot-live"></span> MAs AUTO');
+    var ok = Object.keys(techResults).filter(function(k){return techResults[k];}).length;
+    setStatus('ok','✓ MAs y RSI calculados para '+ok+'/'+TK.length+' tokens · '+new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit',second:'2-digit'}));
+    setTimeout(function(){setStatus('');},8000);
+    return;
+  }
+
+  var t = TK[idx];
+  setStatus('loading','📊 Calculando '+t.sym+' ('+( idx+1)+'/'+TK.length+')...');
+
+  var url = 'https://api.coingecko.com/api/v3/coins/'+t.cgHistId+'/market_chart?vs_currency=usd&days=60&interval=daily';
+
+  fetch(url, {signal:AbortSignal.timeout(15000)})
+    .then(function(r){if(!r.ok)throw new Error(r.status);return r.json();})
+    .then(function(data){
+      if(!data.prices||data.prices.length<20){
+        techResults[t.sym]=null;
+      } else {
+        var prices = data.prices.map(function(p){return p[1];});
+        var vols   = data.total_volumes.map(function(v){return v[1];});
+
+        var sma9  = calcSMA(prices, 9);
+        var ma20  = calcSMA(prices, 20);
+        var ma50  = calcSMA(prices, 50);
+        var rsi   = calcRSI(prices);
+        var todayVol = vols[vols.length-1];
+        var recentVols = vols.slice(-20,-1);
+        var volLabel = classifyVol(todayVol, recentVols);
+
+        techResults[t.sym] = {sma9:sma9, ma20:ma20, ma50:ma50, rsi:rsi, volDia:todayVol, vol:volLabel};
+      }
+      // Small delay to avoid rate limiting
+      setTimeout(function(){fetchNextTechnical(idx+1, btn);}, 800);
+    })
+    .catch(function(){
+      techResults[t.sym]=null;
+      setTimeout(function(){fetchNextTechnical(idx+1, btn);}, 1000);
+    });
+}
+
+function applyTechnicals(){
+  TK.forEach(function(t){
+    var r = techResults[t.sym];
+    if(!r) return;
+    t.sma9   = r.sma9;
+    t.ma20   = r.ma20;
+    t.ma50   = r.ma50;
+    t.rsi    = r.rsi;
+    t.volDia = r.volDia;
+    t.vol    = r.vol;
+    t.maAuto = true;
+    // Infer trend from MA alignment
+    if(t.price>0 && t.ma20>0 && t.sma9>0){
+      if(t.price > t.ma20 && t.sma9 > t.ma20) t.trend = 'alcista';
+      else if(t.price < t.ma20 && t.sma9 < t.ma20) t.trend = 'bajista';
+      else t.trend = 'lateral';
+    }
+  });
+  renderAll();
+}
 
 // ═══════════════════════════════════════════════════════════════
 // SCORING
 // ═══════════════════════════════════════════════════════════════
 function getMaScore(t){
-  var p = t.price, s9 = t.sma9, m2 = t.ma20, m5 = t.ma50;
-  if(!p || !m2) return 0;
-  var sc = 0;
-  if(s9 > 0 && p > s9) sc += 4;
-  if(p > m2)            sc += 5;
-  if(m5 > 0 && p > m5) sc += 6;
-  if(s9 > 0 && m2 > 0 && s9 > m2) sc += 3; // SMA9 > MA20 bullish
-  if(m2 > 0 && m5 > 0 && m2 > m5) sc += 3; // Golden cross
-  if(m2 > 0 && Math.abs(p - m2)/m2 < 0.04) sc += 2; // Cerca de MA20
-  return Math.min(23, sc);
+  var p=t.price, s9=t.sma9, m2=t.ma20, m5=t.ma50;
+  if(!p||!m2) return 0;
+  var sc=0;
+  if(s9>0&&p>s9)  sc+=4;
+  if(p>m2)         sc+=5;
+  if(m5>0&&p>m5)  sc+=6;
+  if(s9>0&&m2>0&&s9>m2) sc+=3;
+  if(m2>0&&m5>0&&m2>m5) sc+=3;
+  if(m2>0&&Math.abs(p-m2)/m2<0.04) sc+=2;
+  return Math.min(23,sc);
 }
 
 function score(t){
-  var s = 0;
-  s += t.narr * 0.22;
-  var cats = t.cats;
-  var on   = cats.filter(function(c){return c.s===1;}).length;
-  var pend = cats.filter(function(c){return c.s===null;}).length;
-  s += (on/cats.length)*18 + (pend/cats.length)*3;
-  var rsi = parseFloat(t.rsi)||50;
-  s += rsi>=40&&rsi<=70?16:rsi>=30&&rsi<40?11:rsi<30?7:rsi>80?4:10;
-  s += t.trend==='alcista'?12:t.trend==='lateral'?6:1;
-  s += getMaScore(t);
-  s += t.vol==='alto'?10:t.vol==='normal'?6:2;
-  return Math.min(100, Math.round(s));
+  var s=0;
+  s+=t.narr*0.22;
+  var on=t.cats.filter(function(c){return c.s===1;}).length;
+  var pend=t.cats.filter(function(c){return c.s===null;}).length;
+  s+=(on/t.cats.length)*18+(pend/t.cats.length)*3;
+  var rsi=parseFloat(t.rsi)||50;
+  s+=rsi>=40&&rsi<=70?16:rsi>=30&&rsi<40?11:rsi<30?7:rsi>80?4:10;
+  s+=t.trend==='alcista'?12:t.trend==='lateral'?6:1;
+  s+=getMaScore(t);
+  s+=t.vol==='alto'?10:t.vol==='normal'?6:2;
+  return Math.min(100,Math.round(s));
 }
 
 function scoreColor(s){ return s>=75?'var(--g)':s>=50?'var(--y)':s>=30?'var(--txt2)':'var(--r)'; }
@@ -466,442 +529,232 @@ function scoreClass(s){ return s>=75?'hot':s>=50?'warn':s>=30?'cold':'danger'; }
 
 function getMaSignals(t){
   var p=t.price, s9=t.sma9, m2=t.ma20, m5=t.ma50;
-  var out = [];
+  var out=[];
   if(!p||!m2) return out;
-  if(s9>0){ out.push(p>s9?{txt:'P > SMA9',c:'var(--g)'}:{txt:'P < SMA9',c:'var(--r)'}); }
+  if(s9>0) out.push(p>s9?{txt:'P > SMA9',c:'var(--g)'}:{txt:'P < SMA9',c:'var(--r)'});
   out.push(p>m2?{txt:'P > MA20',c:'var(--g)'}:{txt:'P < MA20',c:'var(--r)'});
-  if(m5>0){ out.push(p>m5?{txt:'P > MA50',c:'var(--g)'}:{txt:'P < MA50',c:'var(--r)'}); }
-  if(s9>0&&m2>0&&s9>m2) out.push({txt:'SMA9 > MA20 ⚡',c:'var(--g)'});
+  if(m5>0) out.push(p>m5?{txt:'P > MA50',c:'var(--g)'}:{txt:'P < MA50',c:'var(--r)'});
+  // Golden Cross: MA20 > MA50 (bullish alignment)
   if(m2>0&&m5>0&&m2>m5) out.push({txt:'Golden Cross 🌟',c:'var(--g)'});
-  if(m2>0&&m5>0&&m2<m5&&m2<m2*1.02) out.push({txt:'Death Cross ⚠️',c:'var(--r)'});
+  // Death Cross: MA20 < MA50 (bearish alignment)
+  else if(m2>0&&m5>0&&m2<m5) out.push({txt:'Death Cross ⚠️',c:'var(--r)'});
   return out;
 }
 
-function decision(t, sc){
-  var ratio = t.price>0&&t.be>0 ? t.price/t.be : 0;
-  var bulls  = getMaSignals(t).filter(function(m){return m.c==='var(--g)';}).length;
-  if(sc>=80&&ratio>=0.90) return {cls:'extend',lbl:'⬆ EXTENDER TP',txt:'Momentum excepcional con precio cerca del BE. Los catalizadores y MAs sugieren que el token puede superar los TPs actuales. Considerar elevar TP1.'};
-  if(sc>=80)              return {cls:'hold',  lbl:'◉ ALTA CONVICCIÓN — MANTENER',txt:'Momentum muy fuerte pero precio aún lejos del BE. Catalizadores activos. Mantener posición completa en staking.'};
-  if(sc>=55&&bulls>=3)    return {cls:'hold',  lbl:'→ MANTENER — MAs ALCISTAS',txt:'Momentum moderado con MAs alineadas al alza. El plan 20/30/30/20% es correcto. Preparar ejecución de TP1 cuando llegue el precio.'};
-  if(sc>=55)              return {cls:'hold',  lbl:'→ MANTENER TPs ACTUALES',txt:'Momentum moderado. Los catalizadores están en proceso. Ejecutar sin dudar cuando el precio llegue al TP1.'};
-  if(sc>=30)              return {cls:'wait',  lbl:'⏳ ESPERAR CATALIZADORES',txt:'Momentum bajo. Precio bajo las MAs. Necesita más señales antes de moverse. Mantener en staking y esperar.'};
-  return                         {cls:'danger',lbl:'⚠ REVISIÓN ESTRATÉGICA',txt:'Múltiples señales débiles. Si el momentum sigue deteriorándose, revisar el plan. No actuar impulsivamente.'};
+function decision(t,sc){
+  var ratio=t.price>0&&t.be>0?t.price/t.be:0;
+  var bulls=getMaSignals(t).filter(function(m){return m.c==='var(--g)';}).length;
+  if(sc>=80&&ratio>=0.90) return{cls:'extend',lbl:'⬆ EXTENDER TP',txt:'Momentum excepcional con precio cerca del BE. Los catalizadores y MAs sugieren que el token puede superar los TPs actuales.'};
+  if(sc>=80)              return{cls:'hold',  lbl:'◉ ALTA CONVICCIÓN — MANTENER',txt:'Momentum muy fuerte. Catalizadores activos. Mantener posición completa.'};
+  if(sc>=55&&bulls>=3)    return{cls:'hold',  lbl:'→ MANTENER — MAs ALCISTAS',txt:'Momentum moderado con MAs alineadas al alza. Ejecutar sin dudar cuando llegue el TP1.'};
+  if(sc>=55)              return{cls:'hold',  lbl:'→ MANTENER TPs ACTUALES',txt:'Momentum moderado. Los catalizadores están en proceso. Ejecutar sin dudar cuando llegue el TP1.'};
+  if(sc>=30)              return{cls:'wait',  lbl:'⏳ ESPERAR CATALIZADORES',txt:'Momentum bajo. Precio bajo las MAs. Mantener en staking y esperar.'};
+  return                         {cls:'danger',lbl:'⚠ REVISIÓN ESTRATÉGICA',txt:'Múltiples señales débiles. No actuar impulsivamente.'};
 }
 
 // ═══════════════════════════════════════════════════════════════
 // FORMAT
 // ═══════════════════════════════════════════════════════════════
 function fp(v){
-  v = parseFloat(v)||0;
-  if(v>=10000)  return '$'+Math.round(v).toLocaleString('en-US');
-  if(v>=100)    return '$'+v.toFixed(2);
-  if(v>=1)      return '$'+v.toFixed(3);
-  if(v>=0.01)   return '$'+v.toFixed(4);
+  v=parseFloat(v)||0;
+  if(v>=10000) return '$'+Math.round(v).toLocaleString('en-US');
+  if(v>=100)   return '$'+v.toFixed(2);
+  if(v>=1)     return '$'+v.toFixed(3);
+  if(v>=0.01)  return '$'+v.toFixed(4);
   return '$'+v.toFixed(5);
-}
-function fv(v){
-  if(!v||v<=0) return '—';
-  if(v>=1e6) return (v/1e6).toFixed(2)+'M';
-  if(v>=1e3) return (v/1e3).toFixed(1)+'K';
-  return Math.round(v).toString();
 }
 
 // ═══════════════════════════════════════════════════════════════
 // RENDER
 // ═══════════════════════════════════════════════════════════════
 function renderAll(){
-  var html = '';
-  TK.forEach(function(t, i){
-    var sc  = score(t);
-    var col = scoreColor(sc);
-    var cls = scoreClass(sc);
-    var dec = decision(t, sc);
-    var p   = t.price;
-    var pnl = p>0&&t.be>0 ? (p/t.be-1)*100 : null;
-    var pnlCol = pnl===null?'var(--txt3)':pnl>=0?'var(--g)':'var(--r)';
-    var pnlTxt = pnl===null?'—':( pnl>=0?'🟢 +':' 🔴 ')+pnl.toFixed(1)+'% vs BE';
-    var fg = sc>=75?'linear-gradient(90deg,var(--g),#00ffb0)':sc>=50?'linear-gradient(90deg,var(--y),#ffd000)':sc>=30?'linear-gradient(90deg,var(--txt2),#6070a0)':'linear-gradient(90deg,var(--r),#ff7090)';
+  var html='';
+  TK.forEach(function(t,i){
+    var sc=score(t), col=scoreColor(sc), cls=scoreClass(sc), dec=decision(t,sc);
+    var p=t.price;
+    var pnl=p>0&&t.be>0?(p/t.be-1)*100:null;
+    var pnlCol=pnl===null?'var(--txt3)':pnl>=0?'var(--g)':'var(--r)';
+    var pnlTxt=pnl===null?'—':(pnl>=0?'🟢 +':'🔴 ')+pnl.toFixed(1)+'% vs BE';
+    var fg=sc>=75?'linear-gradient(90deg,var(--g),#00ffb0)':sc>=50?'linear-gradient(90deg,var(--y),#ffd000)':sc>=30?'linear-gradient(90deg,var(--txt2),#6070a0)':'linear-gradient(90deg,var(--r),#ff7090)';
 
     // TP1
-    var tp1Pct = p>0&&t.tp1>0 ? Math.min(100,(p/t.tp1)*100) : 0;
-    var bePct  = t.tp1>0      ? Math.min(100,(t.be/t.tp1)*100) : 0;
-    var tp1Dist= p>0&&t.tp1>p ? ((t.tp1/p-1)*100) : 0;
-    var tp1Col = tp1Pct>=80?'var(--g)':tp1Pct>=50?'var(--y)':'var(--r)';
-    var tp1Lbl = tp1Pct>=100?'✅ ALCANZADO':'falta +'+tp1Dist.toFixed(1)+'%';
+    var tp1Pct=p>0&&t.tp1>0?Math.min(100,(p/t.tp1)*100):0;
+    var bePct=t.tp1>0?Math.min(100,(t.be/t.tp1)*100):0;
+    var tp1Dist=p>0&&t.tp1>p?((t.tp1/p-1)*100):0;
+    var tp1Col=tp1Pct>=80?'var(--g)':tp1Pct>=50?'var(--y)':'var(--r)';
 
-    // MA signals
-    var maSigs  = getMaSignals(t);
-    var maTagsHtml = maSigs.map(function(m){
+    // MA
+    var maSigs=getMaSignals(t);
+    var maTagsHtml=maSigs.map(function(m){
       return '<span class="ma-sig-tag" style="background:'+m.c+'15;color:'+m.c+';border:1px solid '+m.c+'30">'+m.txt+'</span>';
     }).join('');
 
-    // MA cells
-    var maHtml = [
-      {lbl:'SMA 9',val:t.sma9,desc:'Rápida — primera señal de giro. En rojo en el chart de Kraken.',color:'#ff7070'},
-      {lbl:'MA 20',val:t.ma20,desc:'Media — tendencia de corto plazo. En morado/rosa en el chart.',color:'#c080ff'},
-      {lbl:'MA 50',val:t.ma50,desc:'Lenta — tendencia principal. En azul en el chart de Kraken.',color:'#4d8aff'}
+    var maHtml=[
+      {lbl:'SMA 9',val:t.sma9,name:'sma9'},
+      {lbl:'MA 20',val:t.ma20,name:'ma20'},
+      {lbl:'MA 50',val:t.ma50,name:'ma50'}
     ].map(function(m){
       if(!m.val||m.val<=0) return '<div class="ma-box"><div class="ma-box-lbl">'+m.lbl+'</div><div class="ma-box-val" style="color:var(--txt3)">—</div><div class="ma-box-sig" style="color:var(--txt3)">sin dato</div></div>';
-      var above = p > m.val;
-      var mc    = above?'var(--g)':'var(--r)';
+      var above=p>m.val;
+      var mc=above?'var(--g)':'var(--r)';
       return '<div class="ma-box '+(above?'above':'below')+'">'
         +'<div class="ma-box-lbl">'+m.lbl+'</div>'
-        +'<div class="ma-box-val" style="color:'+mc+'">'+fp(m.val)+'</div>'
-        +'<div class="ma-box-sig" style="color:'+mc+'">'+(above?'▲ sobre':'▼ bajo')+'</div>'
-        +'</div>';
+        +'<div class="ma-box-val" id="'+m.name+'v_'+t.sym+'" style="color:'+mc+'">'+fp(m.val)+'</div>'
+        +'<div class="ma-box-sig" style="color:'+mc+'">'+(above?'▲ sobre':'▼ bajo')+'</div></div>';
     }).join('');
 
-    // Vol
-    var volPct = t.vol==='alto'?88:t.vol==='normal'?52:18;
-    var volCol = t.vol==='alto'?'var(--g)':t.vol==='normal'?'var(--y)':'var(--txt3)';
+    var volPct=t.vol==='alto'?88:t.vol==='normal'?52:18;
+    var volCol=t.vol==='alto'?'var(--g)':t.vol==='normal'?'var(--y)':'var(--txt3)';
+    var maSourceTxt=t.maAuto?'AUTO ✓':'sin calcular';
+    var maSourceCls=t.maAuto?'auto':'manual';
 
-    var sym = t.sym;
-
-    html += '<div class="tc '+cls+'" id="tc_'+sym+'" style="animation-delay:'+(i*.03)+'s">';
-    html += '<div class="tc-stripe" style="background:'+t.color+'"></div>';
+    var sym=t.sym;
+    html+='<div class="tc '+cls+'" id="tc_'+sym+'" style="animation-delay:'+(i*.03)+'s">';
+    html+='<div class="tc-stripe" style="background:'+t.color+'"></div>';
 
     // HEAD
-    html += '<div class="tc-head">';
-    html += '<div class="tc-ico" style="background:'+t.color+'18;border:1px solid '+t.color+'28;color:'+t.color+'">'+sym.slice(0,3)+'</div>';
-    html += '<div class="tc-info">'
-      +'<div class="tc-sym" style="color:'+t.color+'">'+sym+'</div>'
-      +'<div class="tc-phase">'+t.phase+'</div>'
-      +'</div>';
-    html += '<div class="tc-right">'
-      +'<div class="tc-price" id="pr_'+sym+'">'+fp(p)+'</div>'
+    html+='<div class="tc-head">';
+    html+='<div class="tc-ico" style="background:'+t.color+'18;border:1px solid '+t.color+'28;color:'+t.color+'">'+sym.slice(0,3)+'</div>';
+    html+='<div class="tc-info"><div class="tc-sym" style="color:'+t.color+'">'+sym+'</div><div class="tc-phase">'+t.phase+'</div></div>';
+    html+='<div class="tc-right">'
+      +'<div class="tc-price" id="pr_'+sym+'">'+(p>0?fp(p):'—')+'</div>'
       +'<div class="tc-be">BE '+fp(t.be)+'</div>'
       +'<div class="tc-pnl" id="pnl_'+sym+'" style="color:'+pnlCol+'">'+pnlTxt+'</div>'
-      +'<div class="tc-tag" id="tag_'+sym+'" style="background:rgba(74,82,112,.2);color:var(--txt3)">manual</div>'
-      +'</div>';
-    html += '</div>';
-
-    // MOMENTUM
-    html += '<div class="mom">'
-      +'<div class="mom-row"><span class="mom-lbl">MOMENTUM</span><span class="mom-val" id="ms_'+sym+'" style="color:'+col+'">'+sc+'/100</span></div>'
-      +'<div class="mom-track"><div class="mom-bar" id="mb_'+sym+'" style="width:'+sc+'%;background:'+fg+'"></div></div>'
-      +'</div>';
-
-    // TP1 PROGRESS
-    html += '<div class="tp1">'
-      +'<div class="tp1-row"><span class="tp1-lbl">PROGRESO AL TP1</span><span class="tp1-val" style="color:'+tp1Col+'">'+tp1Pct.toFixed(0)+'% — '+tp1Lbl+'</span></div>'
-      +'<div class="tp1-track">'
-      +'<div class="tp1-fill" style="width:'+tp1Pct.toFixed(1)+'%;background:'+tp1Col+'"></div>'
-      +'<div class="tp1-be-mark" style="left:'+bePct.toFixed(1)+'%"></div>'
-      +'</div>'
-      +'<div class="tp1-labs"><span>'+fp(p)+'</span><span style="color:var(--txt3)">BE '+fp(t.be)+'</span><span style="color:'+tp1Col+'">TP1 '+fp(t.tp1)+'</span></div>'
-      +'</div>';
-
-    // MAS
-    html += '<div class="mas">'
-      +'<div class="mas-hdr"><span class="mas-lbl">MEDIAS MÓVILES</span><span class="mas-tf">12H Kraken</span></div>'
-      +'<div class="mas-grid">'+maHtml+'</div>'
-      +(maSigs.length?'<div class="ma-signals">'+maTagsHtml+'</div>':'')
-      +'</div>';
-
-    // VOLUME
-    html += '<div class="vol"><div class="vol-row">'
-      +'<span class="vol-lbl">VOLUMEN</span>'
-      +'<div class="vol-track"><div class="vol-fill" style="width:'+volPct+'%;background:'+volCol+'"></div></div>'
-      +'<span class="vol-num" id="vn_'+sym+'" style="color:'+volCol+'">'+(t.volDia>0?fv(t.volDia):t.vol.toUpperCase())+'</span>'
+      +'<div class="tc-tag" id="tag_'+sym+'" style="background:rgba(74,82,112,.2);color:var(--txt3)">esperando</div>'
       +'</div></div>';
 
+    // MOMENTUM
+    html+='<div class="mom"><div class="mom-row"><span class="mom-lbl">MOMENTUM</span><span class="mom-val" id="ms_'+sym+'" style="color:'+col+'">'+sc+'/100</span></div>'
+      +'<div class="mom-track"><div class="mom-bar" id="mb_'+sym+'" style="width:'+sc+'%;background:'+fg+'"></div></div></div>';
+
+    // TP1
+    html+='<div class="tp1"><div class="tp1-row"><span class="tp1-lbl">PROGRESO AL TP1</span>'
+      +'<span class="tp1-val" style="color:'+tp1Col+'">'+tp1Pct.toFixed(0)+'% — '+(tp1Pct>=100?'✅ LISTO':'falta +'+tp1Dist.toFixed(1)+'%')+'</span></div>'
+      +'<div class="tp1-track"><div class="tp1-fill" style="width:'+tp1Pct.toFixed(1)+'%;background:'+tp1Col+'"></div>'
+      +'<div class="tp1-be-mark" style="left:'+bePct.toFixed(1)+'%"></div></div>'
+      +'<div class="tp1-labs"><span>'+fp(p)+'</span><span>BE '+fp(t.be)+'</span><span style="color:'+tp1Col+'">TP1 '+fp(t.tp1)+'</span></div></div>';
+
+    // MAS
+    html+='<div class="mas"><div class="mas-hdr"><span class="mas-lbl">MEDIAS MÓVILES</span>'
+      +'<span class="mas-src '+maSourceCls+'">'+maSourceTxt+'</span></div>'
+      +'<div class="mas-grid">'+maHtml+'</div>'
+      +(maSigs.length?'<div class="ma-signals">'+maTagsHtml+'</div>':'')+'</div>';
+
+    // VOLUME
+    html+='<div class="vol"><div class="vol-row"><span class="vol-lbl">VOLUMEN</span>'
+      +'<div class="vol-track"><div class="vol-fill" style="width:'+volPct+'%;background:'+volCol+'"></div></div>'
+      +'<span class="vol-num" style="color:'+volCol+'">'+(t.volDia>0?fmtVol(t.volDia):t.vol.toUpperCase())+'</span></div></div>';
+
     // CATALYSTS
-    html += '<div class="cats">'+t.cats.map(function(c){
-      var cls2 = c.s===1?'on':c.s===null?'pend':'off';
+    html+='<div class="cats">'+t.cats.map(function(c){
+      var cls2=c.s===1?'on':c.s===null?'pend':'off';
       return '<div class="cat '+cls2+'">'+(c.s===1?'✓':c.s===null?'⏳':'✗')+' '+c.n+'</div>';
     }).join('')+'</div>';
 
     // DECISION
-    html += '<div class="dec '+dec.cls+'" id="dec_'+sym+'"><div class="dec-lbl">'+dec.lbl+'</div><div class="dec-txt">'+dec.txt+'</div></div>';
+    html+='<div class="dec '+dec.cls+'" id="dec_'+sym+'"><div class="dec-lbl">'+dec.lbl+'</div><div class="dec-txt">'+dec.txt+'</div></div>';
 
     // NOTE
-    html += '<div class="tc-note">'+t.note+'</div>';
-
-    // INPUTS
-    html += '<div class="inp-wrap">'
-      +'<div class="inp-toggle" onclick="togInp(\''+sym+'\')"><span class="inp-toggle-lbl">✏️ Actualizar datos</span><span class="inp-toggle-chev" id="inpC_'+sym+'">▼</span></div>'
-      +'<div class="inp-panel" id="inpP_'+sym+'">';
-
-    // Group 1
-    html += '<div class="inp-group-title">PRECIO Y MOMENTUM</div>';
-    html += '<div class="inp-grid-2">';
-    html += mkField('p_'+sym,'PRECIO HOY','number',p>0?p:'','any',t.be<1?'0.000':'0',sym,
-      'Precio actual en USD. Se actualiza automáticamente. Puedes corregirlo si ves diferencia.',
-      [['Sobre BE','Posición en ganancias — positivo'],['Bajo BE','Posición en pérdidas — mantener plan']]);
-    html += mkField('r_'+sym,'RSI (12H)','number',t.rsi||'','1','50',sym,
-      'RSI 14 del chart de 12H en Kraken. Mide sobrecompra/sobreventa.',
-      [['< 30','Sobreventa — posible rebote técnico'],['30 – 70','Zona neutral — tendencia dominante'],['> 70','Sobrecompra — posible corrección']]);
-    html += '</div>';
-
-    html += '<div class="inp-grid-2">';
-    html += mkSel('tr_'+sym,'TENDENCIA',t.trend,[['alcista','⬆ Alcista'],['lateral','→ Lateral'],['bajista','⬇ Bajista']],sym,
-      'Dirección general en el chart. Alcista = máximos crecientes. Bajista = mínimos decrecientes.',
-      [['Alcista','Precio haciendo máximos crecientes'],['Lateral','Precio en rango — sin dirección'],['Bajista','Precio haciendo mínimos decrecientes']]);
-    html += mkSel('vo_'+sym,'VOLUMEN GENERAL',t.vol,[['alto','⬆ Alto'],['normal','→ Normal'],['bajo','⬇ Bajo']],sym,
-      'Nivel de volumen general comparado con días anteriores. Alto = hay convicción detrás del movimiento.',
-      [['Alto','Volumen >40% sobre media — convicción real'],['Normal','Volumen en rango habitual'],['Bajo','Movimiento sin convicción — puede revertir']]);
-    html += '</div>';
-
-    // Group 2 — MAs
-    html += '<div class="inp-group-title">MEDIAS MÓVILES — Chart 12H de Kraken</div>';
-    html += '<div class="inp-grid-3">';
-    html += mkField('s9_'+sym,'SMA 9','number',t.sma9>0?t.sma9:'','any','valor',sym,
-      'Media móvil de 9 periodos. La más rápida. Primera señal de giro. Línea roja en el chart de Kraken.',
-      [['P > SMA9','Primera señal alcista — momentum girando'],['SMA9 > MA20','Aceleración alcista'],['P < SMA9','Sin momentum alcista todavía']]);
-    html += mkField('m2_'+sym,'MA 20','number',t.ma20>0?t.ma20:'','any','valor',sym,
-      'Media móvil de 20 periodos. Tendencia a corto plazo. Línea morada/rosa en el chart.',
-      [['P > MA20','Tendencia corto plazo alcista'],['MA20 > MA50','Golden Cross — señal fuerte'],['P < MA20','Tendencia corto plazo bajista']]);
-    html += mkField('m5_'+sym,'MA 50','number',t.ma50>0?t.ma50:'','any','valor',sym,
-      'Media móvil de 50 periodos. La más importante. Línea azul en el chart de Kraken.',
-      [['P > MA50','Tendencia principal alcista confirmada'],['P < MA50','Bajo soporte clave — precaución'],['MA50 bajando','Presión vendedora sostenida']]);
-    html += '</div>';
-
-    // Group 3 — Volume
-    html += '<div class="inp-group-title">VOLUMEN DEL DÍA — Número del chart</div>';
-    html += '<div class="inp-grid-2">';
-    html += mkField('vd_'+sym,'VOLUMEN HOY','number',t.volDia>0?t.volDia:'','any','ej: 247540',sym,
-      'Volumen exacto del día en unidades. Lo ves en la barra inferior del chart (ej: 247.54K = 247540). Permite detectar spikes de volumen.',
-      [['Mucho mayor que días anteriores','Convicción real detrás del movimiento'],['Similar a días anteriores','Volumen normal — sin señal especial'],['Mucho menor que días anteriores','Movimiento sin respaldo — puede revertir']]);
-    html += '</div>';
-
-    html += '</div></div></div>'; // close inp-panel, inp-wrap, tc
+    html+='<div class="tc-note">'+t.note+'</div>';
+    html+='</div>';
   });
 
-  document.getElementById('tlist').innerHTML = html;
+  document.getElementById('tlist').innerHTML=html;
   updateGlobal();
 }
 
-// ═══════════════════════════════════════════════════════════════
-// INPUT BUILDERS
-// ═══════════════════════════════════════════════════════════════
-function mkField(id, lbl, type, val, step, ph, sym, desc, ranges){
-  var eid = 'exp_'+id;
-  var rows = ranges.map(function(r){
-    return '<div class="inp-explain-row"><span class="inp-explain-range">'+r[0]+'</span><span class="inp-explain-lbl">'+r[1]+'</span></div>';
-  }).join('');
-  return '<div class="inp-field">'
-    +'<div class="inp-field-hdr" onclick="togExp(\''+eid+'\',\'ch_'+eid+'\')">'
-    +'<span class="inp-field-lbl">'+lbl+'</span>'
-    +'<span class="inp-field-chev" id="ch_'+eid+'">▼</span>'
-    +'</div>'
-    +'<input class="inp-f" id="'+id+'" type="'+type+'" step="'+step+'" placeholder="'+ph+'" value="'+(val||'')+'" oninput="onInput(\''+sym+'\')">'
-    +'<div class="inp-explain" id="'+eid+'">'
-    +'<div class="inp-explain-desc">'+desc+'</div>'+rows
-    +'</div></div>';
-}
-
-function mkSel(id, lbl, val, opts, sym, desc, ranges){
-  var eid = 'exp_'+id;
-  var options = opts.map(function(o){
-    return '<option value="'+o[0]+'"'+(val===o[0]?' selected':'')+'>'+o[1]+'</option>';
-  }).join('');
-  var rows = ranges.map(function(r){
-    return '<div class="inp-explain-row"><span class="inp-explain-range">'+r[0]+'</span><span class="inp-explain-lbl">'+r[1]+'</span></div>';
-  }).join('');
-  return '<div class="inp-field">'
-    +'<div class="inp-field-hdr" onclick="togExp(\''+eid+'\',\'ch_'+eid+'\')">'
-    +'<span class="inp-field-lbl">'+lbl+'</span>'
-    +'<span class="inp-field-chev" id="ch_'+eid+'">▼</span>'
-    +'</div>'
-    +'<select class="inp-sel" id="'+id+'" onchange="onInput(\''+sym+'\')">'+options+'</select>'
-    +'<div class="inp-explain" id="'+eid+'">'
-    +'<div class="inp-explain-desc">'+desc+'</div>'+rows
-    +'</div></div>';
-}
-
-// ═══════════════════════════════════════════════════════════════
-// TOGGLES
-// ═══════════════════════════════════════════════════════════════
-function togInp(sym){
-  var p = document.getElementById('inpP_'+sym);
-  var c = document.getElementById('inpC_'+sym);
-  if(p){ var o = p.classList.toggle('open'); if(c) c.classList.toggle('open',o); }
-}
-function togExp(eid, cid){
-  var e = document.getElementById(eid);
-  var c = document.getElementById(cid);
-  if(e){ var o = e.classList.toggle('open'); if(c) c.classList.toggle('open',o); }
-}
-
-// ═══════════════════════════════════════════════════════════════
-// INPUT HANDLER — refresh on change
-// ═══════════════════════════════════════════════════════════════
-function onInput(sym){
-  var t = TK.find(function(x){return x.sym===sym;});
-  if(!t) return;
-  readToken(t);
-  refreshCard(t);
-}
-
-function readToken(t){
-  var sym = t.sym;
-  var get = function(id){ var e=document.getElementById(id); return e?e.value:''; };
-  var pv = parseFloat(get('p_'+sym));   if(pv>0)   t.price  = pv;
-  var rv = parseFloat(get('r_'+sym));   if(rv)      t.rsi    = rv;
-  var tr = get('tr_'+sym);              if(tr)      t.trend  = tr;
-  var vo = get('vo_'+sym);              if(vo)      t.vol    = vo;
-  var s9 = parseFloat(get('s9_'+sym));  if(s9>0)    t.sma9   = s9;
-  var m2 = parseFloat(get('m2_'+sym));  if(m2>0)    t.ma20   = m2;
-  var m5 = parseFloat(get('m5_'+sym));  if(m5>0)    t.ma50   = m5;
-  var vd = parseFloat(get('vd_'+sym));  if(vd>0)    t.volDia = vd;
-}
-
-function refreshCard(t){
-  var sym = t.sym;
-  var sc  = score(t);
-  var col = scoreColor(sc);
-  var dec = decision(t, sc);
-  var p   = t.price;
-  var pnl = p>0&&t.be>0 ? (p/t.be-1)*100 : null;
-
-  // Card class
-  var card = document.getElementById('tc_'+sym);
-  if(card) card.className = 'tc '+scoreClass(sc);
-
-  // Momentum
-  var mb = document.getElementById('mb_'+sym);
-  var ms = document.getElementById('ms_'+sym);
-  var fg = sc>=75?'linear-gradient(90deg,var(--g),#00ffb0)':sc>=50?'linear-gradient(90deg,var(--y),#ffd000)':sc>=30?'linear-gradient(90deg,var(--txt2),#6070a0)':'linear-gradient(90deg,var(--r),#ff7090)';
-  if(mb){ mb.style.width=sc+'%'; mb.style.background=fg; }
-  if(ms){ ms.textContent=sc+'/100'; ms.style.color=col; }
-
-  // Price / PNL
-  var pr = document.getElementById('pr_'+sym);
-  var pnlEl = document.getElementById('pnl_'+sym);
-  if(pr) pr.textContent = fp(p);
+function updatePriceDisplay(t){
+  var p=t.price;
+  var pnl=p>0&&t.be>0?(p/t.be-1)*100:null;
+  var pnlCol=pnl===null?'var(--txt3)':pnl>=0?'var(--g)':'var(--r)';
+  var pr=document.getElementById('pr_'+t.sym);
+  var pnlEl=document.getElementById('pnl_'+t.sym);
+  if(pr) pr.textContent=p>0?fp(p):'—';
   if(pnlEl){
-    var pnlCol = pnl===null?'var(--txt3)':pnl>=0?'var(--g)':'var(--r)';
-    pnlEl.textContent = pnl===null?'—':(pnl>=0?'🟢 +':'🔴 ')+pnl.toFixed(1)+'% vs BE';
-    pnlEl.style.color = pnlCol;
+    pnlEl.textContent=pnl===null?'—':(pnl>=0?'🟢 +':'🔴 ')+pnl.toFixed(1)+'% vs BE';
+    pnlEl.style.color=pnlCol;
   }
+}
 
-  // Decision
-  var decEl = document.getElementById('dec_'+sym);
-  if(decEl){
-    decEl.className = 'dec '+dec.cls;
-    var lbl = decEl.querySelector('.dec-lbl');
-    var txt = decEl.querySelector('.dec-txt');
-    if(lbl) lbl.textContent = dec.lbl;
-    if(txt) txt.textContent = dec.txt;
-  }
-
+function refreshAll(){
+  TK.forEach(function(t){
+    var sc=score(t), col=scoreColor(sc), dec=decision(t,sc);
+    var card=document.getElementById('tc_'+t.sym);
+    if(card) card.className='tc '+scoreClass(sc);
+    var mb=document.getElementById('mb_'+t.sym);
+    var ms=document.getElementById('ms_'+t.sym);
+    var fg=sc>=75?'linear-gradient(90deg,var(--g),#00ffb0)':sc>=50?'linear-gradient(90deg,var(--y),#ffd000)':sc>=30?'linear-gradient(90deg,var(--txt2),#6070a0)':'linear-gradient(90deg,var(--r),#ff7090)';
+    if(mb){mb.style.width=sc+'%';mb.style.background=fg;}
+    if(ms){ms.textContent=sc+'/100';ms.style.color=col;}
+    var decEl=document.getElementById('dec_'+t.sym);
+    if(decEl){decEl.className='dec '+dec.cls;var dl=decEl.querySelector('.dec-lbl');var dt=decEl.querySelector('.dec-txt');if(dl)dl.textContent=dec.lbl;if(dt)dt.textContent=dec.txt;}
+    updatePriceDisplay(t);
+  });
   updateGlobal();
 }
 
 function updateGlobal(){
-  var avg = Math.round(TK.reduce(function(s,t){return s+score(t);},0)/TK.length);
-  var gs = document.getElementById('gScore');
-  if(gs){ gs.textContent=avg; gs.style.color=scoreColor(avg); }
-}
-
-function readAll(){ TK.forEach(readToken); }
-
-// ═══════════════════════════════════════════════════════════════
-// LIVE PRICES — CoinGecko
-// ═══════════════════════════════════════════════════════════════
-function fetchPrices(){
-  var btn  = document.getElementById('fetchBtn');
-  var bar  = document.getElementById('fetchBar');
-  var pill = document.getElementById('livePill');
-  btn.textContent = '⟳  CARGANDO...';
-  pill.className = 'live-pill loading';
-  pill.textContent = '⟳ ACTUALIZANDO';
-
-  var ids = TK.map(function(t){return t.cgId;}).join(',');
-  fetch('https://api.coingecko.com/api/v3/simple/price?ids='+ids+'&vs_currencies=usd&include_24hr_change=true',
-    {signal:AbortSignal.timeout(12000)})
-    .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
-    .then(function(data){
-      var updated = 0;
-      TK.forEach(function(t){
-        var d = data[t.cgId];
-        if(!d||!d.usd) return;
-        t.price = d.usd;
-        var ch = d.usd_24h_change||0;
-
-        // Update input field
-        var pi = document.getElementById('p_'+t.sym);
-        if(pi) pi.value = d.usd;
-
-        // Update live tag
-        var tag = document.getElementById('tag_'+t.sym);
-        if(tag){
-          tag.textContent = 'LIVE '+(ch>=0?'▲+':'▼')+Math.abs(ch).toFixed(1)+'%';
-          tag.style.background = ch>=0?'rgba(0,232,160,.12)':'rgba(255,64,96,.12)';
-          tag.style.color = ch>=0?'var(--g)':'var(--r)';
-        }
-
-        refreshCard(t);
-        updated++;
-      });
-
-      bar.className = 'fetch-bar ok';
-      bar.textContent = '✓ '+updated+' tokens — '+new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-      btn.textContent = '⟳  ACTUALIZAR PRECIOS EN VIVO';
-      pill.className = 'live-pill on';
-      pill.innerHTML = '<span class="dot-pulse"></span> LIVE';
-      setTimeout(function(){ bar.className='fetch-bar'; }, 8000);
-    })
-    .catch(function(){
-      bar.className = 'fetch-bar err';
-      bar.textContent = '✗ Sin conexión — precios manuales activos';
-      btn.textContent = '⟳  ACTUALIZAR PRECIOS EN VIVO';
-      pill.className = 'live-pill off';
-      pill.textContent = '✗ SIN CONEXIÓN';
-      setTimeout(function(){ bar.className='fetch-bar'; }, 6000);
-    });
+  var avg=Math.round(TK.reduce(function(s,t){return s+score(t);},0)/TK.length);
+  var gs=document.getElementById('gScore');
+  if(gs){gs.textContent=avg;gs.style.color=scoreColor(avg);}
 }
 
 // ═══════════════════════════════════════════════════════════════
-// SAVE DAY
+// UI HELPERS
+// ═══════════════════════════════════════════════════════════════
+function setStatus(type, txt){
+  var b=document.getElementById('statusBar');
+  if(!type){b.className='status-bar';return;}
+  b.className='status-bar '+type;
+  b.textContent=txt;
+}
+
+function setPill(id, type, html){
+  var p=document.getElementById(id);
+  if(!p) return;
+  p.className='pill '+type;
+  p.innerHTML=html;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SAVE
 // ═══════════════════════════════════════════════════════════════
 function saveDay(){
-  readAll();
   saveLocal();
-
-  var day = {
-    date: new Date().toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'short',year:'2-digit'}),
-    _raw: new Date().toDateString(),
-    tokens: TK.map(function(t){
-      var sc = score(t);
-      return {sym:t.sym, price:t.price, rsi:t.rsi, score:sc,
-              dec:decision(t,sc).cls, ma20:t.ma20, sma9:t.sma9,
-              ma50:t.ma50, volDia:t.volDia, trend:t.trend};
+  var day={
+    date:new Date().toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'short',year:'2-digit'}),
+    _raw:new Date().toDateString(),
+    tokens:TK.map(function(t){
+      var sc=score(t);
+      return{sym:t.sym,price:t.price,rsi:t.rsi,score:sc,
+             dec:decision(t,sc).cls,ma20:t.ma20,sma9:t.sma9,ma50:t.ma50,volDia:t.volDia,trend:t.trend};
     })
   };
-
-  var hist = getHist().filter(function(h){ return h._raw !== day._raw; });
+  var hist=getHist().filter(function(h){return h._raw!==day._raw;});
   hist.unshift(day);
-  if(hist.length > 30) hist = hist.slice(0,30);
+  if(hist.length>30) hist=hist.slice(0,30);
   setHist(hist);
-
-  var ok = document.getElementById('saveOk');
-  ok.style.display = 'block';
-  setTimeout(function(){ ok.style.display='none'; }, 2000);
+  var ok=document.getElementById('saveOk');
+  ok.style.display='block';
+  setTimeout(function(){ok.style.display='none';},2000);
 }
 
 // ═══════════════════════════════════════════════════════════════
 // SUMMARY
 // ═══════════════════════════════════════════════════════════════
 function renderSummary(){
-  readAll();
-  var data    = TK.map(function(t){ return {t:t, sc:score(t), dec:decision(t,score(t))}; });
-  var avg     = Math.round(data.reduce(function(s,d){ return s+d.sc; },0)/data.length);
-  var sorted  = data.slice().sort(function(a,b){ return b.sc-a.sc; });
-  var maxSc   = sorted[0].sc;
-
-  var scoreEl = document.getElementById('sumScore');
-  var subEl   = document.getElementById('sumSub');
-  if(scoreEl){ scoreEl.textContent=avg; scoreEl.style.color=scoreColor(avg); }
-  if(subEl) subEl.textContent = avg>=70?'Cartera en momentum alcista — preparar TPs':avg>=50?'Momentum moderado — mantener y esperar catalizadores':avg>=35?'Momento de espera — ciclo no activo':'Revisión recomendada — señales negativas dominantes';
-
-  var decCols = {extend:'var(--g)',hold:'var(--y)',wait:'var(--txt3)',danger:'var(--r)'};
-  var decLbls = {extend:'EXTENDER',hold:'MANTENER',wait:'ESPERAR',danger:'REVISAR'};
-
-  document.getElementById('rankList').innerHTML = sorted.map(function(d,i){
-    var t  = d.t;
-    var bw = maxSc>0 ? Math.round(d.sc/maxSc*100) : 0;
-    var dc = decCols[d.dec.cls];
+  var data=TK.map(function(t){return{t:t,sc:score(t),dec:decision(t,score(t))};});
+  var avg=Math.round(data.reduce(function(s,d){return s+d.sc;},0)/data.length);
+  var sorted=data.slice().sort(function(a,b){return b.sc-a.sc;});
+  var maxSc=sorted[0].sc;
+  var scoreEl=document.getElementById('sumScore');
+  var subEl=document.getElementById('sumSub');
+  if(scoreEl){scoreEl.textContent=avg;scoreEl.style.color=scoreColor(avg);}
+  if(subEl) subEl.textContent=avg>=70?'Cartera en momentum alcista — preparar TPs':avg>=50?'Momentum moderado — mantener y esperar catalizadores':avg>=35?'Momento de espera — ciclo no activo':'Revisión recomendada';
+  var decCols={extend:'var(--g)',hold:'var(--y)',wait:'var(--txt3)',danger:'var(--r)'};
+  var decLbls={extend:'EXTENDER',hold:'MANTENER',wait:'ESPERAR',danger:'REVISAR'};
+  document.getElementById('rankList').innerHTML=sorted.map(function(d,i){
+    var t=d.t, bw=maxSc>0?Math.round(d.sc/maxSc*100):0, dc=decCols[d.dec.cls];
     return '<div class="rank-row">'
       +'<div class="rr-n">#'+(i+1)+'</div>'
       +'<div class="rr-sym" style="color:'+t.color+'">'+t.sym+'</div>'
@@ -911,22 +764,19 @@ function renderSummary(){
       +'</div>';
   }).join('');
 
-  // TP1 ranking
-  var tp1Sorted = data.slice().sort(function(a,b){
-    var pA = a.t.price&&a.t.tp1 ? a.t.price/a.t.tp1 : 0;
-    var pB = b.t.price&&b.t.tp1 ? b.t.price/b.t.tp1 : 0;
-    return pB - pA;
+  var tp1s=data.slice().sort(function(a,b){
+    var pA=a.t.price&&a.t.tp1?a.t.price/a.t.tp1:0;
+    var pB=b.t.price&&b.t.tp1?b.t.price/b.t.tp1:0;
+    return pB-pA;
   });
-  document.getElementById('tp1Rank').innerHTML = tp1Sorted.map(function(d,i){
-    var t       = d.t;
-    var pct     = t.price&&t.tp1 ? Math.min(100,(t.price/t.tp1)*100) : 0;
-    var dist    = t.price&&t.tp1&&t.tp1>t.price ? ((t.tp1/t.price-1)*100).toFixed(1) : 0;
-    var tc      = pct>=80?'var(--g)':pct>=50?'var(--y)':'var(--r)';
+  document.getElementById('tp1Rank').innerHTML=tp1s.map(function(d,i){
+    var t=d.t, pct=t.price&&t.tp1?Math.min(100,(t.price/t.tp1)*100):0;
+    var dist=t.price&&t.tp1&&t.tp1>t.price?((t.tp1/t.price-1)*100).toFixed(1):0;
+    var tc=pct>=80?'var(--g)':pct>=50?'var(--y)':'var(--r)';
     return '<div class="tp1-rank-row">'
       +'<span style="font-size:10px;font-weight:900;color:var(--txt3);width:16px">'+(i+1)+'</span>'
       +'<span style="font-size:12px;font-weight:900;color:'+t.color+';width:36px">'+t.sym+'</span>'
-      +'<div style="flex:1;height:6px;background:var(--bg4);border-radius:3px;overflow:hidden">'
-      +'<div style="height:100%;width:'+pct.toFixed(0)+'%;background:'+tc+';border-radius:3px"></div></div>'
+      +'<div style="flex:1;height:6px;background:var(--bg4);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+pct.toFixed(0)+'%;background:'+tc+';border-radius:3px"></div></div>'
       +'<span style="font-size:9px;font-weight:700;font-family:Space Mono,monospace;color:'+tc+';width:34px;text-align:right">'+pct.toFixed(0)+'%</span>'
       +'<span style="font-size:9px;color:var(--txt3);font-family:Space Mono,monospace;width:72px;text-align:right">'+(pct>=100?'✅ LISTO':'falta +'+dist+'%')+'</span>'
       +'</div>';
@@ -937,38 +787,29 @@ function renderSummary(){
 // HISTORY
 // ═══════════════════════════════════════════════════════════════
 function renderHist(){
-  var hist = getHist();
-  if(!hist.length){
-    document.getElementById('histWrap').innerHTML='<div class="hist-empty">Sin historial todavía.<br>Guarda datos diariamente<br>para ver la evolución.</div>';
-    return;
-  }
-  var decCols = {extend:'var(--g)',hold:'var(--y)',wait:'var(--txt3)',danger:'var(--r)'};
-  var decLbls = {extend:'↑ EXT',hold:'→ MAN',wait:'⏳ ESP',danger:'⚠ REV'};
-
-  document.getElementById('histWrap').innerHTML = hist.map(function(h){
-    var avg = h.tokens ? Math.round(h.tokens.reduce(function(s,td){return s+(td.score||0);},0)/h.tokens.length) : 0;
-    var rows = (h.tokens||[]).map(function(td){
-      var t   = TK.find(function(x){return x.sym===td.sym;});
-      var c   = t?t.color:'#888';
-      var sc  = td.score||0;
-      var dc  = decCols[td.dec]||'var(--txt3)';
-      var dl  = decLbls[td.dec]||'—';
-      var pnl = td.price&&t ? ((td.price/t.be)-1)*100 : null;
-      var pc  = pnl!==null?(pnl>=0?'var(--g)':'var(--r)'):'var(--txt2)';
+  var hist=getHist();
+  if(!hist.length){document.getElementById('histWrap').innerHTML='<div class="hist-empty">Sin historial todavía.<br>Guarda datos diariamente.</div>';return;}
+  var decCols={extend:'var(--g)',hold:'var(--y)',wait:'var(--txt3)',danger:'var(--r)'};
+  var decLbls={extend:'↑ EXT',hold:'→ MAN',wait:'⏳ ESP',danger:'⚠ REV'};
+  document.getElementById('histWrap').innerHTML=hist.map(function(h){
+    var avg=h.tokens?Math.round(h.tokens.reduce(function(s,td){return s+(td.score||0);},0)/h.tokens.length):0;
+    var rows=(h.tokens||[]).map(function(td){
+      var t=TK.find(function(x){return x.sym===td.sym;});
+      var c=t?t.color:'#888';
+      var sc=td.score||0;
+      var dc=decCols[td.dec]||'var(--txt3)';
+      var pnl=td.price&&t?(td.price/t.be-1)*100:null;
+      var pc=pnl!==null?(pnl>=0?'var(--g)':'var(--r)'):'var(--txt2)';
       return '<div class="hday-row">'
         +'<div class="hr-sym" style="color:'+c+'">'+td.sym+'</div>'
         +'<div class="hr-price" style="color:'+pc+'">'+fp(td.price)+'</div>'
+        +'<div class="hr-rsi">RSI '+( td.rsi||'—')+'</div>'
         +'<div class="hr-ma20">MA20 '+(td.ma20?fp(td.ma20):'—')+'</div>'
-        +'<div class="hr-vol">'+(td.volDia?fv(td.volDia):'—')+'</div>'
         +'<div class="hr-score" style="color:'+(sc>=70?'var(--g)':sc>=45?'var(--y)':'var(--txt3)')+'">'+sc+'/100</div>'
-        +'<div class="hr-dec" style="background:'+dc+'18;color:'+dc+'">'+dl+'</div>'
+        +'<div class="hr-dec" style="background:'+dc+'18;color:'+dc+'">'+decLbls[td.dec]+'</div>'
         +'</div>';
     }).join('');
-    return '<div class="hday">'
-      +'<div class="hday-hdr">'
-      +'<span class="hday-hdr-date">'+h.date+'</span>'
-      +'<span class="hday-hdr-avg" style="color:'+scoreColor(avg)+'">Avg '+avg+'/100</span>'
-      +'</div>'+rows+'</div>';
+    return '<div class="hday"><div class="hday-hdr"><span class="hday-hdr-date">'+h.date+'</span><span class="hday-hdr-avg" style="color:'+scoreColor(avg)+'">Avg '+avg+'/100</span></div>'+rows+'</div>';
   }).join('');
 }
 
@@ -977,26 +818,29 @@ function renderHist(){
 // ═══════════════════════════════════════════════════════════════
 function goTab(n){
   ['tokens','summary','hist'].forEach(function(t){
-    document.getElementById('view-'+t).classList.toggle('active', t===n);
-    document.getElementById('tab-'+t).classList.toggle('active', t===n);
+    document.getElementById('view-'+t).classList.toggle('active',t===n);
+    document.getElementById('tab-'+t).classList.toggle('active',t===n);
   });
-  if(n==='summary'){ readAll(); renderSummary(); }
-  if(n==='hist')   renderHist();
+  if(n==='summary') renderSummary();
+  if(n==='hist')    renderHist();
 }
 
 // ═══════════════════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════════════════
-document.getElementById('hdate').textContent =
+document.getElementById('hdate').textContent=
   new Date().toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'});
 
 loadSaved();
 renderAll();
 
+// Auto-fetch prices on load, then technicals after prices done
 setTimeout(function(){
   fetchPrices();
-  setInterval(fetchPrices, 60000);
-}, 600);
+}, 500);
+
+// Auto-refresh prices every 60s
+setInterval(fetchPrices, 60000);
 </script>
 </body>
 </html>
