@@ -629,16 +629,30 @@ function renderAll(){
 
     // TP1
     html+='<div class="tp1"><div class="tp1-row"><span class="tp1-lbl">PROGRESO AL TP1</span>'
-      +'<span class="tp1-val" style="color:'+tp1Col+'">'+tp1Pct.toFixed(0)+'% — '+(tp1Pct>=100?'✅ LISTO':'falta +'+tp1Dist.toFixed(1)+'%')+'</span></div>'
-      +'<div class="tp1-track"><div class="tp1-fill" style="width:'+tp1Pct.toFixed(1)+'%;background:'+tp1Col+'"></div>'
+      +'<span id="tp1val_'+sym+'" class="tp1-val" style="color:'+tp1Col+'">'+tp1Pct.toFixed(0)+'% — '+(tp1Pct>=100?'✅ LISTO':'falta +'+tp1Dist.toFixed(1)+'%')+'</span></div>'
+      +'<div class="tp1-track"><div id="tp1fill_'+sym+'" class="tp1-fill" style="width:'+tp1Pct.toFixed(1)+'%;background:'+tp1Col+'"></div>'
       +'<div class="tp1-be-mark" style="left:'+bePct.toFixed(1)+'%"></div></div>'
-      +'<div class="tp1-labs"><span>'+fp(p)+'</span><span>BE '+fp(t.be)+'</span><span style="color:'+tp1Col+'">TP1 '+fp(t.tp1)+'</span></div></div>';
+      +'<div class="tp1-labs"><span id="tp1price_'+sym+'">'+fp(p)+'</span><span>BE '+fp(t.be)+'</span><span style="color:'+tp1Col+'">TP1 '+fp(t.tp1)+'</span></div></div>';
 
     // MAS
     html+='<div class="mas"><div class="mas-hdr"><span class="mas-lbl">MEDIAS MÓVILES</span>'
       +'<span class="mas-src '+maSourceCls+'">'+maSourceTxt+'</span></div>'
       +'<div class="mas-grid">'+maHtml+'</div>'
-      +(maSigs.length?'<div class="ma-signals">'+maTagsHtml+'</div>':'')+'</div>';
+      +(maSigs.length?'<div class="ma-signals" style="margin-bottom:8px">'+maTagsHtml+'</div>':'')
+      // Manual input row — always visible
+      +'<div style="background:var(--bg3);border-radius:8px;padding:8px 10px;border:1px solid var(--border)">'
+      +'<div style="font-size:7px;font-weight:700;letter-spacing:1.5px;color:var(--txt3);margin-bottom:6px;text-transform:uppercase">✏️ Introducir manualmente — valores del chart 1D de Kraken</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:5px">'
+      +'<div><div style="font-size:7px;color:var(--txt3);margin-bottom:2px;font-weight:700">SMA9</div>'
+      +'<input id="mi_sma9_'+sym+'" type="number" step="any" placeholder="—" value="'+(t.sma9>0?t.sma9:'')+'" oninput="onManual(\''+sym+'\')" style="width:100%;background:var(--bg4);border:1px solid var(--border2);border-radius:5px;color:var(--txt);font-size:11px;font-weight:700;font-family:Space Mono,monospace;padding:5px 6px;-webkit-appearance:none;outline:none"></div>'
+      +'<div><div style="font-size:7px;color:var(--txt3);margin-bottom:2px;font-weight:700">MA20</div>'
+      +'<input id="mi_ma20_'+sym+'" type="number" step="any" placeholder="—" value="'+(t.ma20>0?t.ma20:'')+'" oninput="onManual(\''+sym+'\')" style="width:100%;background:var(--bg4);border:1px solid var(--border2);border-radius:5px;color:var(--txt);font-size:11px;font-weight:700;font-family:Space Mono,monospace;padding:5px 6px;-webkit-appearance:none;outline:none"></div>'
+      +'<div><div style="font-size:7px;color:var(--txt3);margin-bottom:2px;font-weight:700">MA50</div>'
+      +'<input id="mi_ma50_'+sym+'" type="number" step="any" placeholder="—" value="'+(t.ma50>0?t.ma50:'')+'" oninput="onManual(\''+sym+'\')" style="width:100%;background:var(--bg4);border:1px solid var(--border2);border-radius:5px;color:var(--txt);font-size:11px;font-weight:700;font-family:Space Mono,monospace;padding:5px 6px;-webkit-appearance:none;outline:none"></div>'
+      +'<div><div style="font-size:7px;color:var(--txt3);margin-bottom:2px;font-weight:700">RSI</div>'
+      +'<input id="mi_rsi_'+sym+'" type="number" step="1" min="0" max="100" placeholder="—" value="'+(t.rsi||'')+'" oninput="onManual(\''+sym+'\')" style="width:100%;background:var(--bg4);border:1px solid var(--border2);border-radius:5px;color:var(--txt);font-size:11px;font-weight:700;font-family:Space Mono,monospace;padding:5px 6px;-webkit-appearance:none;outline:none"></div>'
+      +'</div></div>'
+      +'</div>';
 
     // VOLUME
     html+='<div class="vol"><div class="vol-row"><span class="vol-lbl">VOLUMEN</span>'
@@ -665,14 +679,33 @@ function renderAll(){
 
 function updatePriceDisplay(t){
   var p=t.price;
+  var sym=t.sym;
+
+  // PNL vs BE
   var pnl=p>0&&t.be>0?(p/t.be-1)*100:null;
   var pnlCol=pnl===null?'var(--txt3)':pnl>=0?'var(--g)':'var(--r)';
-  var pr=document.getElementById('pr_'+t.sym);
-  var pnlEl=document.getElementById('pnl_'+t.sym);
+  var pr=document.getElementById('pr_'+sym);
+  var pnlEl=document.getElementById('pnl_'+sym);
   if(pr) pr.textContent=p>0?fp(p):'—';
   if(pnlEl){
     pnlEl.textContent=pnl===null?'—':(pnl>=0?'🟢 +':'🔴 ')+pnl.toFixed(1)+'% vs BE';
     pnlEl.style.color=pnlCol;
+  }
+
+  // TP1 progress bar — KEY FIX
+  if(p>0&&t.tp1>0){
+    var tp1Pct=Math.min(100,(p/t.tp1)*100);
+    var tp1Dist=t.tp1>p?((t.tp1/p-1)*100):0;
+    var tp1Col=tp1Pct>=80?'var(--g)':tp1Pct>=50?'var(--y)':'var(--r)';
+    var tp1Txt=tp1Pct>=100?'✅ LISTO':'falta +'+tp1Dist.toFixed(1)+'%';
+
+    var fillEl=document.getElementById('tp1fill_'+sym);
+    var valEl=document.getElementById('tp1val_'+sym);
+    var priceEl=document.getElementById('tp1price_'+sym);
+
+    if(fillEl){fillEl.style.width=tp1Pct.toFixed(1)+'%';fillEl.style.background=tp1Col;}
+    if(valEl){valEl.textContent=tp1Pct.toFixed(0)+'% — '+tp1Txt;valEl.style.color=tp1Col;}
+    if(priceEl) priceEl.textContent=fp(p);
   }
 }
 
