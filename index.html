@@ -428,68 +428,87 @@ function fetchTechnicals(){
   fetchNextTechnical(0, btn);
 }
 
-function fetchNextTechnical(idx, btn){
-  if(idx >= TK.length){
-    // All done
-    applyTechnicals();
-    btn.textContent='📊  ACTUALIZAR MAs Y RSI — Automático';
-    setPill('pillMA','on','<span class="dot-live"></span> MAs AUTO');
-    var ok = Object.keys(techResults).filter(function(k){return techResults[k];}).length;
-    setStatus('ok','✓ MAs y RSI calculados para '+ok+'/'+TK.length+' tokens · '+new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit',second:'2-digit'}));
-    setTimeout(function(){setStatus('');},8000);
-    return;
-  }
-
-  var t = TK[idx];
-  setStatus('loading','📊 Calculando '+t.sym+' ('+( idx+1)+'/'+TK.length+')...');
-
+function fetchOneTechnical(t, retries, onDone){
   var url = 'https://api.coingecko.com/api/v3/coins/'+t.cgHistId+'/market_chart?vs_currency=usd&days=60&interval=daily';
-
-  fetch(url, {signal:AbortSignal.timeout(15000)})
-    .then(function(r){if(!r.ok)throw new Error(r.status);return r.json();})
+  fetch(url, {signal:AbortSignal.timeout(18000)})
+    .then(function(r){
+      if(r.status===429){
+        // Rate limited — wait 3s and retry
+        if(retries>0){
+          setTimeout(function(){fetchOneTechnical(t, retries-1, onDone);}, 3000);
+        } else { techResults[t.sym]=null; onDone(); }
+        return;
+      }
+      if(!r.ok) throw new Error(r.status);
+      return r.json();
+    })
     .then(function(data){
+      if(!data) return; // already handled above
       if(!data.prices||data.prices.length<20){
         techResults[t.sym]=null;
       } else {
         var prices = data.prices.map(function(p){return p[1];});
         var vols   = data.total_volumes.map(function(v){return v[1];});
-
-        var sma9  = calcSMA(prices, 9);
-        var ma20  = calcSMA(prices, 20);
-        var ma50  = calcSMA(prices, 50);
-        var rsi   = calcRSI(prices);
-        var todayVol = vols[vols.length-1];
-        var recentVols = vols.slice(-20,-1);
-        var volLabel = classifyVol(todayVol, recentVols);
-
-        techResults[t.sym] = {sma9:sma9, ma20:ma20, ma50:ma50, rsi:rsi, volDia:todayVol, vol:volLabel};
+        techResults[t.sym] = {
+          sma9:calcSMA(prices,9), ma20:calcSMA(prices,20), ma50:calcSMA(prices,50),
+          rsi:calcRSI(prices),
+          volDia:vols[vols.length-1],
+          vol:classifyVol(vols[vols.length-1], vols.slice(-20,-1))
+        };
       }
-      // Small delay to avoid rate limiting
-      setTimeout(function(){fetchNextTechnical(idx+1, btn);}, 800);
+      onDone();
     })
     .catch(function(){
-      techResults[t.sym]=null;
-      setTimeout(function(){fetchNextTechnical(idx+1, btn);}, 1000);
+      if(retries>0){
+        setTimeout(function(){fetchOneTechnical(t, retries-1, onDone);}, 2000);
+      } else { techResults[t.sym]=null; onDone(); }
     });
+}
+
+function fetchNextTechnical(idx, btn){
+  if(idx >= TK.length){
+    applyTechnicals();
+    btn.textContent='📊  ACTUALIZAR MAs Y RSI — Automático';
+    var ok=Object.keys(techResults).filter(function(k){return techResults[k];}).length;
+    if(ok===TK.length){
+      setPill('pillMA','on','<span class="dot-live"></span> MAs AUTO');
+      setStatus('ok','✓ MAs y RSI calculados para '+ok+'/'+TK.length+' tokens');
+    } else {
+      setPill('pillMA','warn','⚠ MAs PARCIAL '+ok+'/'+TK.length);
+      setStatus('err','⚠ '+ok+'/'+TK.length+' tokens calculados — los demás: introduce manualmente');
+    }
+    setTimeout(function(){setStatus('');},10000);
+    return;
+  }
+  var t=TK[idx];
+  setStatus('loading','📊 Calculando '+t.sym+' ('+(idx+1)+'/'+TK.length+')...');
+  fetchOneTechnical(t, 2, function(){
+    // 1.5s delay between tokens to avoid rate limiting
+    setTimeout(function(){fetchNextTechnical(idx+1, btn);}, 1500);
+  });
 }
 
 function applyTechnicals(){
   TK.forEach(function(t){
-    var r = techResults[t.sym];
+    var r=techResults[t.sym];
     if(!r) return;
-    t.sma9   = r.sma9;
-    t.ma20   = r.ma20;
-    t.ma50   = r.ma50;
-    t.rsi    = r.rsi;
-    t.volDia = r.volDia;
-    t.vol    = r.vol;
-    t.maAuto = true;
-    // Infer trend from MA alignment
-    if(t.price>0 && t.ma20>0 && t.sma9>0){
-      if(t.price > t.ma20 && t.sma9 > t.ma20) t.trend = 'alcista';
-      else if(t.price < t.ma20 && t.sma9 < t.ma20) t.trend = 'bajista';
-      else t.trend = 'lateral';
+    t.sma9=r.sma9; t.ma20=r.ma20; t.ma50=r.ma50;
+    t.rsi=r.rsi; t.volDia=r.volDia; t.vol=r.vol;
+    t.maAuto=true;
+    if(t.price>0&&t.ma20>0&&t.sma9>0){
+      if(t.price>t.ma20&&t.sma9>t.ma20) t.trend='alcista';
+      else if(t.price<t.ma20&&t.sma9<t.ma20) t.trend='bajista';
+      else t.trend='lateral';
     }
+    // Populate manual input fields with calculated values
+    var s9El=document.getElementById('mi_sma9_'+t.sym);
+    var m2El=document.getElementById('mi_ma20_'+t.sym);
+    var m5El=document.getElementById('mi_ma50_'+t.sym);
+    var rsEl=document.getElementById('mi_rsi_'+t.sym);
+    if(s9El) s9El.value=r.sma9.toFixed(t.sma9<1?5:t.sma9<10?4:t.sma9<100?3:2);
+    if(m2El) m2El.value=r.ma20.toFixed(t.ma20<1?5:t.ma20<10?4:t.ma20<100?3:2);
+    if(m5El) m5El.value=r.ma50.toFixed(t.ma50<1?5:t.ma50<10?4:t.ma50<100?3:2);
+    if(rsEl) rsEl.value=r.rsi;
   });
   renderAll();
 }
@@ -677,7 +696,47 @@ function renderAll(){
   updateGlobal();
 }
 
-function updatePriceDisplay(t){
+function onManual(sym){
+  var t=TK.find(function(x){return x.sym===sym;});
+  if(!t) return;
+  var s9=parseFloat(document.getElementById('mi_sma9_'+sym).value);
+  var m2=parseFloat(document.getElementById('mi_ma20_'+sym).value);
+  var m5=parseFloat(document.getElementById('mi_ma50_'+sym).value);
+  var rs=parseFloat(document.getElementById('mi_rsi_'+sym).value);
+  if(s9>0) t.sma9=s9;
+  if(m2>0) t.ma20=m2;
+  if(m5>0) t.ma50=m5;
+  if(rs>0) t.rsi=rs;
+  // Infer trend
+  if(t.price>0&&t.ma20>0){
+    if(t.price>t.ma20&&(t.sma9<=0||t.sma9>t.ma20)) t.trend='alcista';
+    else if(t.price<t.ma20) t.trend='bajista';
+    else t.trend='lateral';
+  }
+  t.maAuto=false;
+  // Re-render just this card's MA section
+  var sc=score(t), col=scoreColor(sc), dec=decision(t,sc);
+  var card=document.getElementById('tc_'+sym);
+  if(card) card.className='tc '+scoreClass(sc);
+  var ms=document.getElementById('ms_'+sym);
+  var mb=document.getElementById('mb_'+sym);
+  var fg=sc>=75?'linear-gradient(90deg,var(--g),#00ffb0)':sc>=50?'linear-gradient(90deg,var(--y),#ffd000)':sc>=30?'linear-gradient(90deg,var(--txt2),#6070a0)':'linear-gradient(90deg,var(--r),#ff7090)';
+  if(ms){ms.textContent=sc+'/100';ms.style.color=col;}
+  if(mb){mb.style.width=sc+'%';mb.style.background=fg;}
+  // Update MA boxes
+  [['sma9',t.sma9],['ma20',t.ma20],['ma50',t.ma50]].forEach(function(m){
+    var el=document.getElementById(m[0]+'v_'+sym);
+    if(!el) return;
+    var above=t.price>0&&m[1]>0&&t.price>m[1];
+    el.textContent=m[1]>0?fp(m[1]):'—';
+    el.style.color=m[1]>0?(above?'var(--g)':'var(--r)'):'var(--txt3)';
+  });
+  var decEl=document.getElementById('dec_'+sym);
+  if(decEl){decEl.className='dec '+dec.cls;var dl=decEl.querySelector('.dec-lbl');var dt=decEl.querySelector('.dec-txt');if(dl)dl.textContent=dec.lbl;if(dt)dt.textContent=dec.txt;}
+  updateGlobal();
+}
+
+
   var p=t.price;
   var sym=t.sym;
 
